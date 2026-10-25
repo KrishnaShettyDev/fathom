@@ -1,0 +1,993 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marketing OS — Product & Engineering Specification</title><style>
+:root{--ink:#182b39;--muted:#607180;--accent:#096b68;--line:#dce5e8}*{box-sizing:border-box}body{margin:0;background:#f4f7f7;color:var(--ink);font:16px/1.7 system-ui,-apple-system,sans-serif}aside{position:fixed;inset:0 auto 0 0;width:285px;overflow:auto;padding:28px 22px;background:#102e38;color:white}aside strong{font-size:20px;display:block;margin-bottom:6px}aside small{color:#a6c6cb}nav{margin-top:28px}nav a{display:block;text-decoration:none;color:#bcd1d5;font-size:12px;line-height:1.5;padding:6px 0}nav .level-1{color:white;font-weight:700;margin-top:14px}nav a:hover{color:#83ddd0}main{margin-left:285px;max-width:1300px;padding:55px 65px}.hero{padding:30px 0 55px}.eyebrow,.part-label{text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:750;color:var(--accent)}.hero h1{font-size:52px;line-height:1.1;letter-spacing:-2px;margin:18px 0}.hero p{font-size:21px;max-width:760px;color:var(--muted)}.meta{font-size:13px;color:var(--muted)}.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:30px}.phases div{padding:16px;background:white;border:1px solid var(--line);border-radius:8px;font-size:14px}.phases b{display:block;color:var(--accent)}.part{background:white;padding:38px;margin-bottom:30px;border:1px solid var(--line);border-radius:12px}h1,h2,h3{line-height:1.3;scroll-margin-top:24px}section h1{font-size:32px;margin-top:12px}h2{font-size:24px;margin-top:40px}h3{font-size:19px;margin-top:28px}p,li{max-width:90ch}li{margin:6px 0}a{color:var(--accent);overflow-wrap:anywhere}table{width:100%;border-collapse:collapse;font-size:13px;margin:24px 0;display:block;overflow:auto}th,td{text-align:left;vertical-align:top;padding:12px;border:1px solid var(--line);min-width:125px}th{background:#eaf3f2}tr:nth-child(even){background:#fafcfc}pre{padding:20px;background:#132e38;color:#d4ece9;border-radius:8px;overflow:auto;font-size:12px;line-height:1.6}code{font-size:.9em;overflow-wrap:anywhere}blockquote{border-left:3px solid var(--accent);margin:24px 0;padding:8px 20px;background:#f0f7f6}hr{border:0;border-top:1px solid var(--line);margin:30px 0}@media(max-width:950px){aside{position:relative;width:100%;max-height:230px}main{margin:0;padding:25px}.part{padding:22px}.hero h1{font-size:38px}.phases{grid-template-columns:repeat(2,1fr)}}@media print{aside{display:none}main{margin:0;padding:0;max-width:none}.part{border:0;padding:0;break-before:page}body{background:white;font-size:10pt}h2,h3{break-after:avoid}pre, tr{break-inside:avoid}.hero{break-after:page}.hero h1{font-size:40pt}table{display:table;font-size:8pt}a{color:inherit}}
+</style></head><body><aside><strong>Marketing OS</strong><small>Product & engineering specification<br>24 October 2026 · Version 1.0</small><nav><a class="level-1" href="#section-0">Product requirements and operating workflows</a><a class="level-2" href="#section-1">Product promise and first customers</a><a class="level-2" href="#section-2">Personas, ownership, and permissions</a><a class="level-2" href="#section-4">Onboarding and implementation</a><a class="level-2" href="#section-5">Phase 1: Intelligence</a><a class="level-2" href="#section-7">Phase 2: Execution</a><a class="level-2" href="#section-9">Phase 3: Advertising</a><a class="level-2" href="#section-11">Phase 4: Marketing OS</a><a class="level-2" href="#section-13">Screen inventory and required edge states</a><a class="level-2" href="#section-14">Billing and operating policies</a><a class="level-2" href="#section-15">Pressure-test conclusions and release discipline</a><a class="level-1" href="#section-16">Technical architecture and implementation specification</a><a class="level-2" href="#section-17">1. Deployment topology and repository</a><a class="level-2" href="#section-18">2. Tenant ownership, agency access and permissions</a><a class="level-2" href="#section-19">3. Data model</a><a class="level-2" href="#section-20">4. Constraints and indexes</a><a class="level-2" href="#section-21">5. Approval and execution state machine</a><a class="level-2" href="#section-22">6. Internal API contract</a><a class="level-2" href="#section-23">7. Jobs, webhooks and connector behavior</a><a class="level-2" href="#section-24">8. Measurement and AI boundaries</a><a class="level-2" href="#section-25">9. Reliability, cost and testing</a><a class="level-2" href="#section-26">10. Build sequence and pressure-test findings</a><a class="level-2" href="#section-27">Official technical references</a><a class="level-1" href="#section-28">Integration appendix: contracts, access gates, and implementation sequence</a><a class="level-2" href="#section-29">1. Common connector contract</a><a class="level-2" href="#section-30">2. Shopify: commerce foundation and publishing</a><a class="level-2" href="#section-31">3. Google Search Console: owned search evidence</a><a class="level-2" href="#section-32">4. Google Analytics 4: website outcomes</a><a class="level-2" href="#section-33">5. Bing Webmaster Tools and AI Performance</a><a class="level-2" href="#section-34">6. WordPress publishing</a><a class="level-2" href="#section-35">7. Google Ads: current onboarding and account access</a><a class="level-2" href="#section-36">8. Microsoft Advertising</a><a class="level-2" href="#section-37">9. Meta Marketing API</a><a class="level-2" href="#section-38">10. Klaviyo lifecycle integration</a><a class="level-2" href="#section-39">11. Release evidence and ownership</a><a class="level-1" href="#section-40">AI visibility, advertising APIs, and evidence requirements</a><a class="level-2" href="#section-41">OpenAI advertising: documented integration surface</a><a class="level-2" href="#section-42">Recommended OpenAI connector contract</a><a class="level-2" href="#section-43">Measurement and attribution</a><a class="level-2" href="#section-44">AI visibility collection</a><a class="level-2" href="#section-45">Competitor implications</a><a class="level-2" href="#section-46">Free data versus paid dependencies</a><a class="level-2" href="#section-47">Acceptance and pressure tests</a><a class="level-1" href="#section-48">Delivery plan, economics, and release control</a><a class="level-2" href="#section-49">1. Product decision and boundaries</a><a class="level-2" href="#section-50">2. Commercial model and packaging</a><a class="level-2" href="#section-51">3. Success metrics and measurement definitions</a><a class="level-2" href="#section-52">4. Step-by-step engineering sequence</a><a class="level-2" href="#section-57">5. Cost model and capacity planning</a><a class="level-2" href="#section-58">6. Release gates and operational ownership</a><a class="level-2" href="#section-59">7. Forward-deployed operating playbook</a><a class="level-2" href="#section-60">8. Pressure-test register</a><a class="level-2" href="#section-61">9. Initial backlog and decision log</a><a class="level-2" href="#section-62">10. Data lifecycle, security, and customer trust</a><a class="level-2" href="#section-63">11. Practical test matrix and incident drills</a><a class="level-2" href="#section-64">12. First ten working days</a><a class="level-1" href="#section-65">Final decisions after pressure testing</a><a class="level-1" href="#section-66">Independent pressure test and required resolutions</a><a class="level-2" href="#section-67">Release-blocking findings</a><a class="level-2" href="#section-72">High-priority gaps</a><a class="level-2" href="#section-84">Acceptance matrix to add to release review</a><a class="level-2" href="#section-85">Overall verdict</a></nav></aside><main><header class="hero"><div class="eyebrow">Commerce brands · Marketing agencies</div><h1>One product.<br>Four complete releases.</h1><p>A detailed product, technical, integration, and delivery plan for a marketing operating system with forward-deployed implementation.</p><div class="meta">Prepared for Krishna Shetty · 16,252 words · Requirements, workflows, architecture, APIs, costs, and release gates</div><div class="phases"><div><b>01 Intelligence</b>Understand and prioritize</div><div><b>02 Execution</b>Approve and publish</div><div><b>03 Advertising</b>Launch and measure</div><div><b>04 Coordination</b>Experiment and optimize</div></div><p style="font-size:15px">Read Parts 1 and 5 for product and delivery decisions. Parts 2–4 specify engineering and integrations. Part 6 records the final decisions; Part 7 contains the independent pressure test and release-blocking conditions. Vendor access is revalidated during implementation; proposed requirements are not claims of completed functionality.</p></header><section class="part"><div class="part-label">PART 1 / 7</div><h1 id="section-0">Product requirements and operating workflows</h1>
+<p>This specification defines proposed product behavior. It does not imply that every external platform supports every action. Connector-specific capability checks, permissions, commercial access, and vendor documentation govern the available controls. The four releases are Intelligence, Execution, Advertising, and Marketing OS.</p>
+<h2 id="section-1">Product promise and first customers</h2>
+<p>The product is a shared marketing workspace for commerce brands and their agencies. It connects merchant facts, observed search visibility, content work, campaign execution, and commercial outcomes. A customer should be able to answer: what is happening, what should we do, who needs to approve it, did it happen, and what changed afterward?</p>
+<p>The first customers are Shopify brands and agencies serving those brands. Agencies are customers and delivery partners. The product should make their teams more effective, give clients transparent approvals, and preserve agency expertise through reusable workflows. A brand can eventually contain multiple stores, websites, languages, currencies, and markets. Brand and Shopify store are therefore separate concepts from the first database migration.</p>
+<p>Forward-deployed delivery is part of the commercial offer. An implementation team establishes integrations, validates tracking, captures business context, configures permissions, launches the first useful workflow, and transfers operating knowledge. The software remains a shared product. Customer-specific work must be explicitly scoped, estimated, and assessed for reuse.</p>
+<h2 id="section-2">Personas, ownership, and permissions</h2>
+<p><strong>Brand owner:</strong> owns the workspace, business facts, vendor accounts, billing relationship, agency access, and spending authorization. <strong>Marketing lead:</strong> prioritizes work, approves content and campaigns within delegated limits, and reviews outcomes. <strong>Contributor:</strong> produces drafts and briefs but cannot publish or spend by default. <strong>Analyst:</strong> explores permitted evidence and reports. <strong>Client approver:</strong> reviews assigned proposals without needing broad operational privileges.</p>
+<p><strong>Agency administrator:</strong> manages agency staff, client relationships, and reusable agency templates. This role cannot override a brand&#39;s restrictions. <strong>Agency operator:</strong> performs work within the permissions granted by each client. <strong>Forward-deployed operator:</strong> receives time-bound, purpose-specific support access with an audit trail.</p>
+<p>The brand owns business data, vendor accounts, and completed client deliverables. The agency owns its private operating templates and internal notes unless a contract specifies otherwise. Ending an agency relationship should revoke access without deleting brand data or disrupting the customer&#39;s access to its own accounts. A verified ownership-transfer procedure is required for exceptional cases.</p>
+<h3 id="section-3">Shared requirements</h3>
+<ul>
+<li><strong>CORE-001 — Workspace isolation.</strong> Every business record belongs to an explicit brand workspace. Acceptance: a user with access to Brand A cannot retrieve Brand B records through UI, API, export, search, storage URL, background job, or report delivery.</li>
+<li><strong>CORE-002 — Delegated permissions.</strong> Reading, drafting, approving, publishing, campaign creation, spending approval, billing, and integrations are separately assignable capabilities. Acceptance: a content editor cannot activate a campaign unless separately granted that capability.</li>
+<li><strong>CORE-003 — Visible account context.</strong> Every consequential confirmation displays brand, external account, market, and destination. Acceptance: switching clients cannot silently submit a draft created under the prior client.</li>
+<li><strong>CORE-004 — Ownership and offboarding.</strong> Brand owners can revoke an agency relationship and export their records. Acceptance: revoked staff lose new access and pending unauthorized writes are blocked; completed brand deliverables remain available.</li>
+<li><strong>CORE-005 — Evidence and action history.</strong> Recommendations reference evidence; writes reference the approved proposal and resulting vendor resource. Acceptance: an operator can reconstruct who proposed, approved, executed, and verified an action.</li>
+<li><strong>CORE-006 — Subscription and usage controls.</strong> The product records included allowances, consumption, overage settings, and billing state. Acceptance: reaching a hard allowance stops new billable work with a clear message and preserves existing data.</li>
+<li><strong>CORE-007 — Accessible interface.</strong> Core workflows support keyboard navigation, clear focus states, readable contrast, descriptive errors, and non-color-only status labels. Acceptance: onboarding, approval, and campaign pause can be completed without a mouse.</li>
+<li><strong>CORE-008 — Connection health.</strong> Every connector displays selected account, granted capabilities, last successful sync, current error, and recovery action. Acceptance: expired authorization is shown as disconnected or degraded rather than as zero business activity.</li>
+<li><strong>CORE-009 — Human-readable metrics.</strong> Metrics disclose time range, timezone, currency, source, freshness, and important definitions. Acceptance: an analyst can explain the denominator behind every visibility percentage.</li>
+<li><strong>CORE-010 — Support access.</strong> Support sessions have an owner, purpose, expiry, and recorded actions. Acceptance: expired support access cannot continue through a background job.</li>
+</ul>
+<h2 id="section-4">Onboarding and implementation</h2>
+<p>The signup flow uses email OTP initially. The customer chooses whether they are a brand or agency, creates an organization, names a brand, and establishes an authorized client relationship where applicable. They connect their website or store, choose exact properties and accounts, set reporting timezone and market, enter goals, and identify approvers. The first baseline should be useful even if some connectors are unavailable.</p>
+<p>The product imports product facts and assets, then asks the customer to confirm uncertain or commercially sensitive statements. Generated claims are not automatically approved facts. The customer selects competitors, business topics, monitoring frequency, and usage allowance. A progress screen shows actual job states and expected next steps. Onboarding can be resumed without duplicate stores or accounts.</p>
+<p>The forward-deployed implementation package produces a connection inventory, a tracking audit, an approved brand-facts register, agreed topics and markets, a baseline report, named approvers, configured spending and publishing boundaries, and a first completed workflow. Any missing tracking or permissions are recorded as known gaps rather than hidden during handover.</p>
+<ul>
+<li><strong>ONB-001 — Resumable setup.</strong> Acceptance: a user leaving after store connection returns to the next unfinished step without reimporting the entire catalogue.</li>
+<li><strong>ONB-002 — Partial value.</strong> Acceptance: a website-only customer can receive a crawl audit while unavailable analytics are explicitly marked unavailable.</li>
+<li><strong>ONB-003 — Account selection.</strong> Acceptance: a Google user with several properties selects the exact property; the product never chooses an arbitrary first property.</li>
+<li><strong>ONB-004 — Baseline sign-off.</strong> Acceptance: the implementation record identifies data gaps, monitoring scope, responsibilities, and customer acknowledgement.</li>
+</ul>
+<h2 id="section-5">Phase 1: Intelligence</h2>
+<p>The primary job is to help a marketing team decide what to work on this week. This release includes catalogue inventory, brand knowledge, owned search and analytics views, sampled AI observations, website diagnostics, competitor comparisons, opportunity prioritization, and client reporting.</p>
+<p>Brand knowledge contains approved product facts, positioning, audiences, tone, prohibited claims, markets, and business goals. Every material fact has a source, owner, status, and freshness. If the merchant provides margins, shipping constraints, or return policies, the product records their source and avoids treating incomplete figures as audited profitability.</p>
+<p>AI observations are organized by question, provider, collection method, market/language setting, timestamp, and sample count. API observations and consumer-interface observations must remain distinguishable. Missing or blocked observations do not count as brand absence. Generated questions are hypotheses, not measured demand. Competitor comparisons use the same eligible observation set and expose coverage differences.</p>
+<p>An opportunity contains a plain-English problem, affected pages or products, supporting evidence, proposed action, confidence explanation, effort estimate, business relevance, owner, and status. Ranking is a transparent prioritization aid. It must not invent expected revenue or imply causal certainty.</p>
+<h3 id="section-6">Requirements and acceptance</h3>
+<ul>
+<li><strong>INT-001 — Catalogue overview.</strong> Show imported products, variants, collections, prices, availability, relevant content, and changes. Acceptance: deleted or unavailable products are not silently presented as current inventory.</li>
+<li><strong>INT-002 — Fact provenance.</strong> Store sources and approval status for brand facts. Acceptance: correcting a fact identifies affected drafts or recommendations that may need review.</li>
+<li><strong>INT-003 — Search and analytics reporting.</strong> Display connected property metrics with source definitions. Acceptance: missing dates and reporting delays are visible, and unavailable data is never converted to zero.</li>
+<li><strong>INT-004 — Observation collection.</strong> Support scheduled, collecting, complete, partial, failed, and stale states. Acceptance: a failed run changes coverage rather than lowering the brand&#39;s visibility score.</li>
+<li><strong>INT-005 — Inspectable evidence.</strong> Retain permitted raw evidence or reproducible references. Acceptance: clicking a mention or citation reveals the underlying observation, timestamp, and collection method.</li>
+<li><strong>INT-006 — Comparable competitors.</strong> Compare brands only within clearly stated samples. Acceptance: a report cannot compare one competitor&#39;s weekly observations with another&#39;s daily observations without disclosing the mismatch.</li>
+<li><strong>INT-007 — Website audit.</strong> Findings identify affected URLs, severity rationale, and reproduction evidence. Acceptance: a resolved finding can be rechecked and closed without deleting its history.</li>
+<li><strong>INT-008 — Opportunity workflow.</strong> Support assign, prioritize, comment, snooze, dismiss, reopen, and convert to work. Acceptance: dismissal requires or permits a reason that remains available for future review.</li>
+<li><strong>INT-009 — Reports.</strong> Include methodology, coverage, freshness, selected filters, and annotations. Acceptance: exports preserve the report&#39;s date range and denominator rather than changing with a later dashboard refresh.</li>
+<li><strong>INT-010 — Release readiness.</strong> A paying customer connects real data, inspects recommendation evidence, and produces a useful client report. Acceptance: the team demonstrates this with representative brand and agency accounts, including degraded connector states.</li>
+</ul>
+<h2 id="section-7">Phase 2: Execution</h2>
+<p>The primary job is turning opportunities into reviewed, live changes. Supported content includes product descriptions, collection pages, buying guides, articles, comparison pages, FAQs, and landing pages. The customer can convert an opportunity to a brief, generate or manually write a draft, review sources, collaborate, approve a specific revision, publish, verify, and examine subsequent outcomes.</p>
+<p>The editorial state machine is Idea, Brief, Draft, In review, Changes requested or Approved, Scheduled, Publishing, Published or Failed or Partially published, and Archived. Users see who owns the next step. An approval applies to exact content, destination, and relevant publishing settings. Editing any approved element invalidates that approval.</p>
+<p>Remote edits are normal. Before publishing, the system compares the current remote version with the version used to prepare the change. Conflicts require review. The product preserves prior content where possible and documents connector-specific recovery limits. Restoring a page cannot remove all cached, indexed, or previously delivered copies.</p>
+<h3 id="section-8">Requirements and acceptance</h3>
+<ul>
+<li><strong>EXE-001 — Brief creation.</strong> A brief includes audience, purpose, target products, desired action, source facts, and success measures. Acceptance: an operator can trace it to its originating opportunity or create it independently.</li>
+<li><strong>EXE-002 — Grounded drafting.</strong> Drafts distinguish approved facts from unsupported claims. Acceptance: fabricated testimonials, certifications, product specifications, or performance claims are flagged and cannot silently become approved knowledge.</li>
+<li><strong>EXE-003 — Editor and preview.</strong> Provide meaningful before/after diffs, links, assets, and relevant layout previews. Acceptance: an approver can identify exactly what will change without reading unrelated history.</li>
+<li><strong>EXE-004 — Collaboration.</strong> Comments, assignments, requested changes, and resolved discussions persist across versions. Acceptance: comments attached to changed text remain understandable or are marked outdated.</li>
+<li><strong>EXE-005 — Version-bound approval.</strong> Acceptance: changing price language, destination, or content after approval returns the item to review.</li>
+<li><strong>EXE-006 — Conflict detection.</strong> Acceptance: a merchant editing the live page while a draft is pending prevents silent overwrite and offers merge or re-review options.</li>
+<li><strong>EXE-007 — Reliable publishing.</strong> Acceptance: retrying a failed job does not create duplicate pages or assets; partially completed work is visible and recoverable.</li>
+<li><strong>EXE-008 — Verification and recovery.</strong> Acceptance: published content is read back, linked, and compared with the intended version; a supported restoration retrieves the preserved prior version.</li>
+<li><strong>EXE-009 — Scheduled actions.</strong> Acceptance: scheduling shows local timezone and absolute execution time, including daylight-saving transitions.</li>
+<li><strong>EXE-010 — Outcome review.</strong> Acceptance: reports show publication dates and subsequent observations without asserting that every change was caused by the publication.</li>
+</ul>
+<h2 id="section-9">Phase 3: Advertising</h2>
+<p>The primary job is launching and improving paid campaigns with control over spending. Integrations expose only platform-supported functionality. Campaign objectives, audiences, bidding, creative formats, product feeds, and reporting vary by provider; a generic interface must not imply identical targeting capabilities.</p>
+<p>The workflow begins with account eligibility, permission, billing-readiness, landing-page, and measurement checks. The operator selects products and prepares a campaign brief containing objective, market, schedule, budget, conversion goal, and destination. The system drafts creatives and proposes settings, then presents the exact proposal for approval. Creation should use a paused state where supported, followed by verification and authorized activation.</p>
+<p>Campaign state distinguishes draft, awaiting approval, approved, submitting, vendor review, paused, active, delivery limited, rejected, completed, archived, and unknown. Active does not mean delivering. Submitted does not mean reviewed. Vendor state is authoritative for delivery; the product shows its last verified state and timestamp.</p>
+<p>Reporting distinguishes spend, clicks, impressions, platform-attributed conversions, observed merchant orders, refunds, and inferred matches. Attribution windows, reporting delays, currencies, and reconciliation rules are visible. Adding platform conversion totals is not equivalent to deduplicating customer orders. Profitability requires adequate merchant cost inputs.</p>
+<h3 id="section-10">Requirements and acceptance</h3>
+<ul>
+<li><strong>ADS-001 — Account readiness.</strong> Acceptance: unavailable write access or account review blocks launch with an actionable explanation while allowing safe draft work.</li>
+<li><strong>ADS-002 — Platform-specific configuration.</strong> Acceptance: unsupported fields cannot be submitted through the shared UI or API.</li>
+<li><strong>ADS-003 — Exact approval.</strong> Approval records account, currency, dates, budget, creative, destination, and relevant settings. Acceptance: changing any consequential field invalidates approval.</li>
+<li><strong>ADS-004 — Paused creation and verification.</strong> Acceptance: a new campaign is verified before activation, and a partially created resource can be resumed without duplication.</li>
+<li><strong>ADS-005 — Spending authority.</strong> Acceptance: users cannot exceed their delegated limits through several small changes or repeated jobs.</li>
+<li><strong>ADS-006 — External drift.</strong> Acceptance: manual changes made in the vendor dashboard are detected before applying a stale proposal.</li>
+<li><strong>ADS-007 — Confirmed controls.</strong> Acceptance: the UI reports paused only after vendor confirmation; ambiguous network outcomes show pending verification rather than success.</li>
+<li><strong>ADS-008 — Measurement clarity.</strong> Acceptance: reports label observed, attributed, modeled, unmatched, and unavailable values appropriately.</li>
+<li><strong>ADS-009 — Disconnection behavior.</strong> Acceptance: revoked credentials block queued writes; the product explains that existing vendor campaigns may continue running.</li>
+<li><strong>ADS-010 — Launch readiness.</strong> An eligible client can approve, create, activate, inspect delivery, and review outcomes for a real campaign with a complete audit trail.</li>
+</ul>
+<h2 id="section-11">Phase 4: Marketing OS</h2>
+<p>The primary job is coordinating marketing work and improving it through controlled experiments. This release introduces a shared campaign calendar, cross-channel offers and assets, experiment registry, lifecycle integrations, inventory-aware recommendations, workflow rules, agency templates, and customer APIs.</p>
+<p>Automation progresses from observing and notifying to preparing drafts, requesting approval, and executing within narrowly pre-authorized policies. Every workflow has an owner, permitted actions, data dependencies, spending or volume limits, expiry where relevant, and exception handling. AI recommendations do not themselves grant execution authority.</p>
+<p>Experiments record a hypothesis, variants, primary metric, duration, stopping rules, eligibility, and known confounders. A before/after chart is not automatically an experiment. Low conversion volume should produce an insufficient-evidence result rather than a fabricated winning variant.</p>
+<h3 id="section-12">Requirements and acceptance</h3>
+<ul>
+<li><strong>OS-001 — Shared planning.</strong> Acceptance: teams can see related content, campaigns, offers, owners, deadlines, and approvals without duplicating the underlying records.</li>
+<li><strong>OS-002 — Experiment registry.</strong> Acceptance: the primary metric and stopping rule are recorded before launch; later changes are visible in history.</li>
+<li><strong>OS-003 — Workflow builder.</strong> Acceptance: only supported connector actions and authorized resources are selectable.</li>
+<li><strong>OS-004 — Dry runs.</strong> Acceptance: a preview run produces proposed actions and explanations without external mutation.</li>
+<li><strong>OS-005 — Bounded execution.</strong> Acceptance: limits apply across repeated runs and concurrent executions, not only to individual actions.</li>
+<li><strong>OS-006 — Stale-input protection.</strong> Acceptance: outdated inventory, revoked permission, or unavailable measurement blocks sensitive actions and alerts the owner.</li>
+<li><strong>OS-007 — Emergency pause.</strong> Acceptance: client-level and global switches stop new actions while preserving in-flight status and audit records.</li>
+<li><strong>OS-008 — Reusable agency workflows.</strong> Acceptance: deploying a template to another client requires explicit resource mapping and cannot reuse the original client&#39;s credentials or private data.</li>
+<li><strong>OS-009 — API and webhooks.</strong> Acceptance: customer integrations inherit workspace scopes, rate limits, and action-approval requirements.</li>
+<li><strong>OS-010 — Reconstructable decisions.</strong> Acceptance: a customer can inspect why an automation ran, the evidence used, the rule or approval authorizing it, and the confirmed result.</li>
+</ul>
+<h2 id="section-13">Screen inventory and required edge states</h2>
+<table>
+<thead>
+<tr>
+<th>Screen</th>
+<th>Main purpose</th>
+<th>Required edge states</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sign-in and verification</td>
+<td>Authenticate and recover access</td>
+<td>Expired OTP, resend limit, wrong code, existing account</td>
+</tr>
+<tr>
+<td>Agency portfolio</td>
+<td>Select and oversee clients</td>
+<td>No clients, revoked relationship, partial access</td>
+</tr>
+<tr>
+<td>Brand overview</td>
+<td>Summarize current priorities</td>
+<td>Missing connectors, stale data, new workspace</td>
+</tr>
+<tr>
+<td>Connections</td>
+<td>Authorize and maintain integrations</td>
+<td>Expired token, scope mismatch, vendor outage, removed account</td>
+</tr>
+<tr>
+<td>Brand knowledge</td>
+<td>Maintain approved business facts</td>
+<td>Conflicting sources, stale facts, unapproved import</td>
+</tr>
+<tr>
+<td>Products</td>
+<td>Inspect catalogue and business context</td>
+<td>Deleted product, unavailable stock, missing fields</td>
+</tr>
+<tr>
+<td>Visibility research</td>
+<td>Inspect questions and observations</td>
+<td>Partial run, blocked source, incomparable samples</td>
+</tr>
+<tr>
+<td>Website audit</td>
+<td>Investigate technical and content findings</td>
+<td>Crawl denied, timeout, redirects, duplicate URLs</td>
+</tr>
+<tr>
+<td>Opportunity inbox</td>
+<td>Prioritize and assign work</td>
+<td>Dismissed, snoozed, stale evidence, duplicate finding</td>
+</tr>
+<tr>
+<td>Content workspace</td>
+<td>Brief, edit, review, and publish</td>
+<td>Conflict, failed upload, invalidated approval, partial publish</td>
+</tr>
+<tr>
+<td>Approval inbox</td>
+<td>Review exact proposals</td>
+<td>Expired approval, changed proposal, insufficient authority</td>
+</tr>
+<tr>
+<td>Campaign workspace</td>
+<td>Prepare and operate paid campaigns</td>
+<td>Vendor rejection, limited delivery, ambiguous status</td>
+</tr>
+<tr>
+<td>Reports</td>
+<td>Explain performance and coverage</td>
+<td>Missing dates, delayed data, mixed currencies</td>
+</tr>
+<tr>
+<td>Experiments</td>
+<td>Define and review tests</td>
+<td>Low sample, early stop, confounding changes</td>
+</tr>
+<tr>
+<td>Automations</td>
+<td>Configure and inspect bounded workflows</td>
+<td>Dry-run failure, stale dependency, paused policy</td>
+</tr>
+<tr>
+<td>Billing and usage</td>
+<td>Manage subscription and allowances</td>
+<td>Past due, exhausted allowance, cancellation, grace period</td>
+</tr>
+<tr>
+<td>Activity and support</td>
+<td>Reconstruct actions and resolve issues</td>
+<td>Partial failure, revoked support access, export pending</td>
+</tr>
+</tbody></table>
+<h2 id="section-14">Billing and operating policies</h2>
+<p>Charge a recurring software fee primarily around brands or workspaces, with explicit allowances for observations, monitoring frequency, content generation, creative generation, connected accounts, and data retention. Agencies can buy multiple client workspaces without weakening brand isolation. Separate software, implementation services, metered overages, and vendor advertising spend.</p>
+<p>Billing states include active, grace period, past due, suspended, canceled, and reactivated; a trial is optional rather than assumed. Suspension should stop new paid compute and unauthorized mutations while preserving permitted read and export access. It should not silently alter live advertising campaigns. Customers must understand which external campaigns continue to spend after software cancellation.</p>
+<p>Operational success measures include time to first useful baseline, connector success, sync freshness, accepted opportunities, draft-to-publish time, approval turnaround, verified-action success rate, weekly active brands, retention, support effort, and AI cost per active workspace. Business outcomes include saved operating time and observed commercial trends. Ranking, citations, sales, and return on ad spend are not guaranteed.</p>
+<h2 id="section-15">Pressure-test conclusions and release discipline</h2>
+<p>A visibility dashboard alone faces intense competition. Phase one must provide credible evidence and agency reporting, and phase two must follow with useful execution. Supporting all platforms immediately creates false parity and excessive maintenance. Connectors should be capability-based and released individually.</p>
+<p>Approval friction can overwhelm teams; batch review should reduce repetitive work while preserving exact resource-level authorization. Agency ownership ambiguity can cause disputes; portability and offboarding need first-release policies. Forward-deployed work can erase margins; implementation packages require defined deliverables, limits, and reuse tracking.</p>
+<p>External account edits are normal and must be reconciled. Sparse conversion data should limit automation. Customer data gaps should remain visible. Synthetic questions must not become fabricated search volume. Attribution must not be presented as incrementality.</p>
+<p>Build order for Intelligence is tenancy and roles, connectors and health, normalized data, brand facts, observations and audits, evidence views, opportunities, reporting and billing, then onboarding verification. Execution follows with content objects and versions, briefs, editor, approval, publishing, verification, and recovery. Advertising starts with read-only account sync and measurement before enabling drafts, exact approvals, paused creation, activation, and controlled updates. Marketing OS starts with shared events and experiments, then dry-run workflows, bounded execution, lifecycle connectors, and APIs.</p>
+<p>The governing release principle is to build the read path, evidence, and recovery path before enabling the write path. Each release must demonstrate its complete customer outcome with realistic failures, not merely a successful interface demonstration.</p>
+</section><section class="part"><div class="part-label">PART 2 / 7</div><h1 id="section-16">Technical architecture and implementation specification</h1>
+<p>This is a proposed engineering design for the complete four-phase product. It uses a modular monolith, one TypeScript repository, a Next.js web application and persistent Node workers on Railway, with Supabase Postgres, Auth and Storage. Each release extends the same product and data model. Implementation must verify pinned dependency compatibility and provider account capabilities before shipping.</p>
+<h2 id="section-17">1. Deployment topology and repository</h2>
+<p>Use <code>apps/web</code> for Next.js App Router, dashboard, authentication callbacks, HTTP APIs and fast webhook ingestion. Use <code>apps/worker</code> for integrations, crawling, observation collection, generation, publishing, advertising actions and reporting. Long jobs do not execute inside web requests.</p>
+<p>Shared packages are <code>domain</code> for authorization and invariants, <code>db</code> for migrations and typed queries, <code>connectors</code> for provider adapters, <code>ai</code> for structured generation and evaluations, <code>contracts</code> for Zod schemas and job payloads, and <code>ui</code> for shared components. Do not create independent services for each feature. Separate deployment units are justified for web traffic and background workloads, while the domain remains one codebase.</p>
+<p>Use separate development, staging and production environments. Production credentials and customer data must not be copied into preview deployments. Keep web, workers and database geographically close. Services remain stateless; original documents, creative and snapshots live in object storage. Container disk is temporary.</p>
+<p>Use SQL migrations as the schema source of truth, generated database types for application use, and one typed query layer rather than multiple ORMs. Run schema changes as an explicit deployment step. Use expand-and-contract migrations so an older worker and newer web application can coexist briefly. Every durable job payload has a schema version. Retain handlers for outstanding older jobs during migration.</p>
+<p>Postgres contains carefully restricted application tables, private integration tables, analytics tables, an append-only audit schema and a dedicated pg-boss schema. Public API exposure is deliberate; never expose every table merely because it exists. Pin a supported Node LTS version compatible with the chosen Next.js and pg-boss releases.</p>
+<h2 id="section-18">2. Tenant ownership, agency access and permissions</h2>
+<p>Separate ownership, access and payment. An organization is a business account. A brand workspace is owned by an organization. An agency organization receives a revocable access grant to one or more brand workspaces. A billing account can pay for those workspaces without becoming the owner of their data.</p>
+<p>Core ownership tables are <code>organizations</code>, <code>organization_memberships</code>, <code>brand_workspaces</code>, <code>brand_access_grants</code>, <code>brand_memberships</code>, <code>invitations</code>, <code>billing_accounts</code>, <code>subscriptions</code> and <code>entitlements</code>. Every tenant-owned entity has a non-null <code>brand_id</code>. An agency switcher selects a brand but does not establish authorization by itself.</p>
+<p>Owner, administrator, strategist, operator, approver, analyst and billing administrator are convenient role bundles. Domain code checks capabilities such as <code>integrations.connect</code>, <code>content.draft</code>, <code>content.publish</code>, <code>campaign.propose</code>, <code>campaign.approve</code>, <code>campaign.execute</code> and <code>billing.manage</code>. Larger clients can require a different person to approve a proposal from the person who created it.</p>
+<p>Integration credentials belong to the brand, not the employee who clicked Connect. Revoking an agency grant must block queued work and new requests immediately. Workers recheck current access before a sensitive action. A brand owner can export data and revoke its agency. Ownership transfer is an explicit audited process with verified destination membership; it is never a side effect of changing the subscription payer.</p>
+<p>Supabase row-level security protects user-facing access. Elevated worker credentials can bypass RLS, so workers also require tenant-scoped repositories and explicit authorization. Never use a browser-supplied organization identifier as evidence of access. Never expose elevated database or integration secrets to clients.</p>
+<h2 id="section-19">3. Data model</h2>
+<p>Foundation tables include profiles, organizations, memberships, brands, grants, invitations, subscriptions, entitlements, usage reservations, usage ledger, feature flags, notifications and audit events.</p>
+<p>Integration tables include <code>connections</code>, <code>credential_versions</code>, <code>connection_capabilities</code>, <code>external_accounts</code>, <code>sync_runs</code>, <code>sync_cursors</code>, <code>webhook_receipts</code> and <code>external_id_mappings</code>. Connections move through pending, active, degraded, reauthorization-required, disabled and revoked states. Record authorized scopes, provider API version, selected account, last success, last error and freshness.</p>
+<p>Brand knowledge includes profiles, audiences, product catalogues, products, variants, collections, brand claims, source documents, document versions and optional knowledge chunks. Each factual claim records source, verification state, expiry and approval history. Product price is not enough to infer margin. Store merchant-supplied commercial inputs with their provenance.</p>
+<p>Phase-one intelligence includes prompt sets, prompt versions, monitoring configurations, observation runs, answer observations, mentions, citations, competitors, crawl runs, page snapshots, audit findings and opportunities. Every observation records acquisition method, actual surface, provider, known model, locale, timestamp, configured geography, prompt hash, parser version and coverage limitations. API observations and consumer-interface observations are distinct categories.</p>
+<p>Phase-two execution includes briefs, content items, immutable content versions, creative assets, publication targets, change sets, approvals, execution runs, publication receipts and restoration snapshots.</p>
+<p>Phase-three advertising includes ad accounts, campaigns, ad groups, ads, creative versions, product feeds, campaign proposals, budget policies, provider actions, daily insights, conversion events, orders, refunds and attribution matches. Retain provider-specific configuration alongside normalized common fields.</p>
+<p>Phase-four coordination includes marketing plans, calendar items, experiments, variants, automation policies, automation runs, recommendations, agency templates, report definitions and report runs. Do not assume experimentation has established causality merely because a performance dashboard changed.</p>
+<h2 id="section-20">4. Constraints and indexes</h2>
+<p>Use composite tenant references: a content version referencing a content item must reference <code>(brand_id, content_item_id)</code>, not only the item UUID. Add unique <code>(brand_id, id)</code> keys where composite foreign keys need them. This prevents accidental cross-brand links at database level.</p>
+<p>Recommended constraints and indexes:</p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Constraint or index</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>organization_memberships</td>
+<td>Unique <code>(organization_id, user_id)</code></td>
+<td>No duplicated membership</td>
+</tr>
+<tr>
+<td>brand_access_grants</td>
+<td>Unique active grant per <code>(brand_id, agency_org_id)</code></td>
+<td>Predictable permissions</td>
+</tr>
+<tr>
+<td>connections</td>
+<td>Unique <code>(brand_id, provider, external_account_id)</code> where active</td>
+<td>Avoid duplicate account connections</td>
+</tr>
+<tr>
+<td>external_id_mappings</td>
+<td>Unique <code>(connection_id, entity_type, external_id)</code></td>
+<td>Idempotent ingestion</td>
+</tr>
+<tr>
+<td>products</td>
+<td>Index <code>(brand_id, status, updated_at)</code></td>
+<td>Catalogue filtering</td>
+</tr>
+<tr>
+<td>webhook_receipts</td>
+<td>Unique <code>(provider, connection_id, provider_event_id)</code></td>
+<td>Replay protection</td>
+</tr>
+<tr>
+<td>content_versions</td>
+<td>Unique <code>(content_item_id, version_number)</code></td>
+<td>Immutable version identity</td>
+</tr>
+<tr>
+<td>approvals</td>
+<td>Unique <code>(change_set_id, payload_hash, approver_user_id)</code></td>
+<td>Exact decision tracking</td>
+</tr>
+<tr>
+<td>provider_actions</td>
+<td>Unique <code>(brand_id, idempotency_key)</code></td>
+<td>External action deduplication</td>
+</tr>
+<tr>
+<td>observations</td>
+<td>Index <code>(brand_id, prompt_version_id, observed_at DESC)</code></td>
+<td>Trend retrieval</td>
+</tr>
+<tr>
+<td>insights_daily</td>
+<td>Unique provider grain plus date, currency and attribution settings</td>
+<td>Prevent duplicate aggregate rows</td>
+</tr>
+<tr>
+<td>conversion_events</td>
+<td>Unique <code>(brand_id, event_type, canonical_event_id)</code>; canonical identity includes store and order identity for purchases</td>
+<td>One logical business event across browser/server transports</td>
+</tr>
+<tr>
+<td>conversion_receipts</td>
+<td>Unique <code>(connection_id, transport, receipt_id)</code></td>
+<td>Preserve each incoming transport without adding another sale</td>
+</tr>
+<tr>
+<td>conversion_deliveries</td>
+<td>Unique <code>(canonical_event_id, destination_account_id, transport)</code></td>
+<td>Track provider dispatch; use the same provider event ID across browser/server paths</td>
+</tr>
+<tr>
+<td>commerce_orders</td>
+<td>Unique <code>(brand_id, store_connection_id, external_order_id)</code></td>
+<td>Prevent collisions across multiple stores</td>
+</tr>
+<tr>
+<td>audit_events</td>
+<td>Index <code>(brand_id, occurred_at DESC)</code></td>
+<td>Audit history</td>
+</tr>
+<tr>
+<td>usage_ledger</td>
+<td>Index <code>(billing_account_id, period_start, meter)</code></td>
+<td>Quota and billing calculation</td>
+</tr>
+</tbody></table>
+<p>Use check constraints for positive budgets, valid currencies, end dates after start dates and bounded percentages. Store currency amounts as integer minor units or fixed-precision numeric values with explicit units. Store provider micro-unit amounts separately when conversion would lose precision. Never use floating-point arithmetic for billing.</p>
+<p>Do not add JSON indexes to every blob. Add indexes to actual measured query paths. Partition very large observation and event tables by time only when measured size and maintenance justify it. Keep raw evidence in object storage with content hashes and metadata rather than duplicating large documents in every record.</p>
+<h2 id="section-21">5. Approval and execution state machine</h2>
+<p>External mutations follow draft, validated, awaiting approval, approved, queued, executing and terminal states. Terminal states include verified success, failure, unknown outcome and cancellation. An HTTP timeout after submitting a provider action is an unknown outcome until reconciled.</p>
+<p>An approval binds the normalized payload hash, version, brand, external account, resource, creative version, destination, budget, schedule, approver identity, capabilities, expiration and provider preconditions. Changing a material field invalidates approval. The UI shows an exact before-and-after preview.</p>
+<p>Immediately before execution, the worker checks current permission, connection state, approval expiry, payload hash, budget policy and provider state. If someone changed the campaign directly in Ads Manager, reject or regenerate the stale proposal. After execution, read back the resource and compare the relevant fields. Store a receipt with provider IDs and observed resulting state.</p>
+<p>Use provider idempotency keys when supported. Otherwise maintain an action ledger, deterministic external reference and reconciliation strategy. Queue delivery guarantees do not create exactly-once behavior at external APIs. A worker can crash after the provider succeeds but before the local transaction commits.</p>
+<p>Restoration is action-specific. A content version can often be restored. An advertisement may be paused or compensated. Money already spent cannot be rolled back. Present the correct operation rather than a universal Undo promise.</p>
+<h2 id="section-22">6. Internal API contract</h2>
+<p>Use <code>/api/v1</code> for application endpoints. Every route derives the user from a verified session, authorizes the supplied brand, validates the body and records sensitive actions. Internal identifiers are UUIDs. Return a stable error shape with <code>code</code>, <code>message</code>, <code>request_id</code> and safe field details. Never include secrets or raw provider responses containing personal data.</p>
+<p>Representative routes:</p>
+<table>
+<thead>
+<tr>
+<th>Method and route</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>POST /api/v1/brands</code></td>
+<td>Create a workspace under an authorized owner organization</td>
+</tr>
+<tr>
+<td><code>GET /api/v1/brands/{brandId}/connections</code></td>
+<td>Connection capability and freshness list</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/brands/{brandId}/connections/{provider}/authorize</code></td>
+<td>Begin bound OAuth or credential connection</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/brands/{brandId}/syncs</code></td>
+<td>Queue an allowed synchronization</td>
+</tr>
+<tr>
+<td><code>GET /api/v1/brands/{brandId}/opportunities</code></td>
+<td>Cursor-paginated evidence-backed recommendations</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/brands/{brandId}/content/{contentId}/versions</code></td>
+<td>Create immutable draft version</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/brands/{brandId}/change-sets</code></td>
+<td>Prepare a validated publication or ad proposal</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/brands/{brandId}/change-sets/{changeId}/approvals</code></td>
+<td>Approve an exact payload version</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/brands/{brandId}/change-sets/{changeId}/execute</code></td>
+<td>Queue approved execution</td>
+</tr>
+<tr>
+<td><code>GET /api/v1/brands/{brandId}/executions/{executionId}</code></td>
+<td>Status, receipt and reconciliation state</td>
+</tr>
+<tr>
+<td><code>GET /api/v1/brands/{brandId}/reports/performance</code></td>
+<td>Explicitly scoped normalized metrics</td>
+</tr>
+<tr>
+<td><code>POST /api/v1/brands/{brandId}/automation-policies</code></td>
+<td>Save bounded automation policy</td>
+</tr>
+<tr>
+<td><code>POST /api/webhooks/{provider}</code></td>
+<td>Verify and durably ingest provider events</td>
+</tr>
+</tbody></table>
+<p>Example change-set creation:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;content.publish&quot;,
+  &quot;connection_id&quot;: &quot;uuid&quot;,
+  &quot;resource_id&quot;: &quot;uuid&quot;,
+  &quot;content_version_id&quot;: &quot;uuid&quot;,
+  &quot;expected_remote_version&quot;: &quot;provider-version-or-content-hash&quot;,
+  &quot;scheduled_at&quot;: null
+}
+</code></pre>
+<p>The response is <code>201</code> with <code>change_set_id</code>, <code>version</code>, <code>payload_hash</code>, <code>status: awaiting_approval</code>, a human-readable diff and validation findings. Proposal preparation does not publish anything.</p>
+<p>Approval request:</p>
+<pre><code class="language-json">{
+  &quot;change_set_version&quot;: 3,
+  &quot;payload_hash&quot;: &quot;sha256:example&quot;,
+  &quot;decision&quot;: &quot;approve&quot;
+}
+</code></pre>
+<p>Execution uses an <code>Idempotency-Key</code> header and returns <code>202</code> with <code>execution_id</code>, <code>status: queued</code> and a status URL. A changed payload returns <code>409 APPROVAL_STALE</code>; revoked access returns <code>403</code>; missing capabilities returns a typed connection error; exhausted allowance returns <code>429</code> with reset or upgrade information. The worker must repeat these checks even when the HTTP request already passed them.</p>
+<p>Performance requests require date range, timezone, account scope and attribution settings. Responses include data freshness, currency, metric definitions and completeness. Cursor pagination is mandatory for potentially large lists. Apply body-size limits and request rate limits. Cross-site request protections must cover cookie-authenticated mutations.</p>
+<h2 id="section-23">7. Jobs, webhooks and connector behavior</h2>
+<p>Use pg-boss queues for webhook processing, sync, crawling, observations, generation, publishing, advertising and reports. Persist intent and enqueue transactionally, or use an outbox. Webhooks verify signatures over raw request bytes, insert a unique receipt and acknowledge quickly. Assume duplicates and out-of-order delivery. Periodic reconciliation repairs missed events.</p>
+<p>Jobs carry brand IDs, entity references, payload version and trace IDs. Secrets are loaded only at execution time. Pagination cursors and chunk checkpoints support recovery. Use finite exponential backoff with jitter, provider/account concurrency limits and dead-letter review. Separate authorization, validation, policy, rate-limit and transient errors. Do not retry a permanent policy rejection indefinitely.</p>
+<p>Workers stop claiming work during shutdown, finish or checkpoint in-flight work and exit within a configured drain period. Long model or browser operations must not hold SQL transactions open. pg-boss LISTEN/NOTIFY requires a session-pinned connection; use a compatible connection mode or intentional polling. Bound worker database pools and monitor queue age, not only queue length.</p>
+<p>Each connector implements authorization, token refresh, account discovery, capability checks, initial and incremental sync, webhook processing, proposal validation, execution, readback and disconnect. Serialize refreshes per connection to avoid token-rotation races. Encrypt credentials with versioned keys held outside the database and redact them from logs. Build a connection-health screen that explains stale data, missing scopes and reconnection requirements.</p>
+<h2 id="section-24">8. Measurement and AI boundaries</h2>
+<p>Keep provider-reported metrics, observed first-party events and our attribution output separate. Record event time, ingestion time, provider timezone, currency, attribution model and window. Backfill mutable reporting windows for late conversions. Never sum provider-attributed conversions as unique total sales.</p>
+<p>Pixel and server events share a stable event ID where the provider supports deduplication. Orders use unique external order IDs. Refunds and cancellations adjust commerce outcomes. Attribution matches record method and confidence; unmatched orders remain unmatched. ROAS needs comparable revenue and spend coverage. Profit needs costs. Incrementality requires a suitable experiment.</p>
+<p>Models draft and classify; deterministic code controls permissions, budgets, approval states and execution. Validate outputs with schemas and business rules. Ground claims in approved sources and label gaps. Crawled pages are untrusted data and must not supply instructions to tools. Every generation records model, prompt version, input references, cost and evaluation status. Use task-specific tool allowlists and no unrestricted secret access.</p>
+<h2 id="section-25">9. Reliability, cost and testing</h2>
+<p>Suggested initial internal targets are dashboard p95 below two seconds for ordinary views, durable webhook acknowledgement below two seconds, and 99.5 percent monthly application availability. These are engineering targets, not contractual promises. Freshness depends on provider limits and is visible to users. RPO and RTO must reflect purchased backup capabilities and a successful restore rehearsal.</p>
+<p>Track model tokens, images, observations, crawl pages, storage and provider charges by brand and task. Reserve allowance before expensive work and settle actual cost afterward. Configure monthly caps, warnings, page/depth limits, concurrency limits and duplicate-input caching. Direct usage and allocated shared infrastructure costs are different accounting categories.</p>
+<p>Railway deployment healthchecks do not continuously monitor live services. Add external uptime monitoring, worker heartbeat, queue-delay alerts, connection error trends, webhook lag, database pressure and cost spikes. Keep request/job/action trace IDs consistent across services.</p>
+<p>Required tests include tenant isolation, revoked agency grants blocking queued work, duplicate and reordered webhooks, worker crashes after external success, stale approvals, provider-side edits, currencies and timezones, refunded orders, token refresh races, quota exhaustion and backup restoration. Contract tests use provider fixtures and controlled sandbox accounts. End-to-end browser tests cover onboarding, reconnect, draft, approval and execution receipt. Test AI claims, cross-brand leakage and prompt injection separately from ordinary application tests.</p>
+<h2 id="section-26">10. Build sequence and pressure-test findings</h2>
+<p>Build repository and CI first, then auth and tenancy, billing entitlements and audit, queue and connector contracts, one Shopify read-only connection, reconciliation, GSC/GA4 ingestion, evidence capture and opportunities. Launch phase one only after real-data accuracy and recovery checks.</p>
+<p>Next implement immutable content versions, exact approvals, publishing, readback and restoration. Phase two requires a complete real publication round trip plus rejection of stale approvals. Then implement advertising read-only sync, conversion plumbing, paused campaign creation, previews, exact approval, controlled activation and reconciliation. Phase three requires a controlled-budget production workflow and validated reporting. Finally add experiments and bounded automation; phase four requires immediate revocation, complete auditability and measurable outcomes.</p>
+<p>The largest risks are falsely treating API answers as consumer visibility, duplicate external actions after retries, worker access bypassing tenant boundaries, incomparable attribution, uncontrolled monitoring costs, and provider reviews delaying launch. Avoid a generic workflow builder, separate vector service, Kubernetes, Redis, microservices or a data warehouse until measured needs justify them. The complete product can grow on a disciplined shared foundation.</p>
+<h2 id="section-27">Official technical references</h2>
+<ul>
+<li>Supabase RLS and elevated access: <a href="https://supabase.com/docs/guides/database/postgres/row-level-security">https://supabase.com/docs/guides/database/postgres/row-level-security</a></li>
+<li>pg-boss architecture: <a href="https://github.com/timgit/pg-boss">https://github.com/timgit/pg-boss</a></li>
+<li>Worker transactions and connection limitations: <a href="https://github.com/timgit/pg-boss/blob/master/docs/api/workers.md">https://github.com/timgit/pg-boss/blob/master/docs/api/workers.md</a></li>
+<li>Railway deployment healthchecks: <a href="https://docs.railway.com/deployments/healthchecks">https://docs.railway.com/deployments/healthchecks</a></li>
+<li>Railway deployment and draining behavior: <a href="https://docs.railway.com/deployments/troubleshooting/slow-deployments">https://docs.railway.com/deployments/troubleshooting/slow-deployments</a></li>
+</ul>
+</section><section class="part"><div class="part-label">PART 3 / 7</div><h1 id="section-28">Integration appendix: contracts, access gates, and implementation sequence</h1>
+<p>This appendix separates documented platform capabilities from proposed implementation choices. It is a researched implementation plan, not evidence that our company or any client already has production access. Documentation was checked on 24 October 2026. Provider contracts, permissions, versions, and quotas must be checked again before each connector ships. The capability registry in the application must record what each connected account can actually do.</p>
+<h2 id="section-29">1. Common connector contract</h2>
+<p>Every connector implements an account lifecycle: connect, authorize, select account or property, verify permissions, initial import, incremental synchronization, reconciliation, reconnect, disconnect, and deletion. The application must never infer account ownership merely because an agency user can see it. A brand administrator selects the brand workspace receiving the connection; agency access is granted separately and can be revoked without transferring brand ownership.</p>
+<p>Store provider name, native account identifier, brand workspace identifier, granted scopes, credential reference, token expiry, API revision, last successful sync time, checkpoint cursor, connector health, and last actionable error. Store secrets encrypted on the server. Browser clients receive connection status, not tokens. Token refresh must be serialized per connection so concurrent workers cannot invalidate rotating credentials.</p>
+<p>Each connector exposes capabilities rather than pretending every provider has the same functions: read catalogue, read content, publish content, read campaigns, create paused campaign, update budget, activate campaign, read conversions, and receive events. Unsupported capabilities remain unavailable with an explanation. Provider-specific campaign fields remain provider-specific. A shared reporting layer must preserve native metric names, currencies, timezones, attribution windows, and collection timestamps.</p>
+<p>All imports are resumable. Workers honor provider rate limits and back off using Retry-After where supplied. Rate limiting must operate at account and provider level; a large agency must not starve smaller customers. Webhook receivers verify authenticity, persist delivery identifiers, enqueue processing, and acknowledge promptly. Periodic reconciliation catches missed or duplicated notifications. Disconnection immediately prevents new jobs and external writes; queued work checks authorization again before execution.</p>
+<p>Write operations require an immutable approved proposal containing account, object, old values, new values, destination, and financial limits where relevant. The executor rechecks current state before applying it. If the remote object changed after approval, the proposal becomes stale. Retries use native idempotency where available; otherwise the worker reads remote state before deciding whether another write is safe. An uncertain result must be represented as uncertain, not automatically retried into duplicate campaigns or duplicate pages.</p>
+<h2 id="section-30">2. Shopify: commerce foundation and publishing</h2>
+<p><strong>Documented capability.</strong> Shopify Admin GraphQL supports the merchant data needed for catalogue synchronization and authorized commerce/content workflows. Product data and customer-related data have different access requirements. The official protected-data documentation explicitly includes orders, refunds, transactions, abandoned checkouts, and customer-related webhooks or metafields as protected customer data. Omitting customer names does not remove the access requirement. Product queries are outside this protected-customer-data category.</p>
+<p><strong>Proposed release sequence.</strong> Phase one starts with read access to catalogue and relevant content. Phase two requests the additional scopes required for approved publishing. Phase three activates order/refund measurement only after required access is approved. The application should support catalogue-only accounts without presenting unavailable revenue data as zero revenue.</p>
+<p><strong>Distribution gate.</strong> A reusable product serving unrelated merchants requires the appropriate public distribution and review path. Do not treat merchant-specific custom applications as a universal substitute for the intended SaaS distribution. Verify the chosen distribution model and billing requirements before accepting public installs. Parent plan source: <a href="https://shopify.dev/docs/apps/launch/distribution">https://shopify.dev/docs/apps/launch/distribution</a> .</p>
+<p><strong>Protected data gate.</strong> Public apps must request the customer-data access necessary for their functionality. Identifying fields such as name, address, phone, and email require additional justification. Prefer minimum fields and avoid importing personal identifiers merely to make future features convenient. A development-store installation does not establish production approval. Handle partial GraphQL errors and redacted fields even when HTTP status is 200. Source: <a href="https://shopify.dev/docs/apps/launch/protected-customer-data">https://shopify.dev/docs/apps/launch/protected-customer-data</a> .</p>
+<p><strong>Implementation.</strong> Use the versioned Admin GraphQL surface, resumable initial import, updates from supported events/webhooks, and periodic reconciliation. Retain native product and variant identifiers. Normalize products, variants, collections, availability, currency, and content independently so deleted variants do not destroy historical campaign mappings. Validate actual queries and mutations against the selected schema during implementation. Do not invent operation names in advance of schema checks.</p>
+<p><strong>Compliance and uninstall.</strong> Implement customers/data_request, customers/redact, and shop/redact before app review. Verify webhook HMAC; invalid signatures return 401. App uninstall disables credential use and cancels pending actions. Redaction handlers must cover derived records, exports, retained payloads, and relevant backups according to the retention policy. Sources: <a href="https://shopify.dev/docs/apps/build/compliance/privacy-law-compliance">https://shopify.dev/docs/apps/build/compliance/privacy-law-compliance</a> and <a href="https://shopify.dev/docs/api/webhooks/latest">https://shopify.dev/docs/api/webhooks/latest</a> .</p>
+<p><strong>Publishing boundary.</strong> Product or article changes are not equivalent to arbitrary theme editing. Treat theme integration as a distinct capability with its own permissions and deployment validation. Before approved content publication, save a snapshot, check for concurrent merchant edits, publish, read back, and verify the rendered page. Restoring content cannot reverse every downstream effect, such as search indexing or customer exposure.</p>
+<p><strong>Maintenance.</strong> Pin a stable API and webhook version, track deprecations, and budget quarterly compatibility work. Shopify recommends regularly updating webhook versions. Source: <a href="https://shopify.dev/docs/apps/build/webhooks/subscribe">https://shopify.dev/docs/apps/build/webhooks/subscribe</a> .</p>
+<h2 id="section-31">3. Google Search Console: owned search evidence</h2>
+<p><strong>Documented capability.</strong> The Search Analytics API provides owned-site search performance grouped by supported dimensions such as date, page, query, country, and device. The request uses POST <a href="https://www.googleapis.com/webmasters/v3/sites/%7BsiteUrl%7D/searchAnalytics/query">https://www.googleapis.com/webmasters/v3/sites/{siteUrl}/searchAnalytics/query</a> with OAuth authorization. The readonly scope is <a href="https://www.googleapis.com/auth/webmasters.readonly">https://www.googleapis.com/auth/webmasters.readonly</a> . Requesting write-level access is unnecessary for reporting.</p>
+<p><strong>Important completeness limitation.</strong> The API returns top rows and does not guarantee every underlying row. Pagination with startRow and a rowLimit up to 25,000 does not turn it into a complete raw-event dataset. Fresh data can be partial; final and fresh datasets must be labelled. Search-query privacy and aggregation can make totals differ from summed rows. Source: <a href="https://developers.google.com/webmaster-tools/v1/searchanalytics/query">https://developers.google.com/webmaster-tools/v1/searchanalytics/query</a> .</p>
+<p><strong>Proposed implementation.</strong> Discover authorized properties, require the customer to choose the correct property, import a bounded historical window, and refresh recent periods to capture revisions. Store aggregation type, filters, dimensions, date range, and data freshness with each dataset. Keep URL-prefix properties and domain properties distinguishable. Daily scheduled pulls and cached reports are sufficient for most marketing workflows; avoid polling on every dashboard render.</p>
+<p><strong>Product boundary.</strong> Search Console queries are Google Search evidence. They are not ChatGPT prompt volumes, consumer conversations, or a comprehensive AI-demand dataset. URL Inspection is a diagnostic capability, not an unrestricted indexing-request mechanism. Do not promise that uploading content or submitting a sitemap causes inclusion in an AI answer.</p>
+<h2 id="section-32">4. Google Analytics 4: website outcomes</h2>
+<p><strong>Documented capability.</strong> GA4 Data API supports runReport, batchRunReports, metadata, and compatibility checking for authorized properties. Quotas apply to tokens, concurrent requests, server errors, properties, and projects. Standard-property concurrency is ten; batch reports still consume individual report quotas. Use returnPropertyQuota to observe remaining capacity. Source: <a href="https://developers.google.com/analytics/devguides/reporting/data/v1/quotas">https://developers.google.com/analytics/devguides/reporting/data/v1/quotas</a> .</p>
+<p><strong>Implementation choice.</strong> Use user OAuth and property selection for customer onboarding. Import aggregate acquisition and conversion reports instead of collecting unnecessary user-level data. Cache standard reports and constrain expensive high-cardinality combinations. Persist property timezone, attribution context, metric definitions, and extraction date. Treat reporting delays, consent effects, thresholding, and missing tracking as data-quality conditions rather than product errors or proof of no sales.</p>
+<p><strong>Measurement boundary.</strong> GA4 and Shopify order totals serve different purposes. GA4 events can be missing, duplicated, delayed, or attributed differently. Shopify refunds and cancelled orders can change net revenue later. The UI must explain reconciliation differences and keep platform-attributed conversions separate from observed commerce transactions. Never add conversion totals from multiple advertising platforms and label the sum unique customers.</p>
+<h2 id="section-33">5. Bing Webmaster Tools and AI Performance</h2>
+<p><strong>Documented access.</strong> Bing recommends OAuth for delegated Webmaster access and also supports API keys. Register the OAuth client through Webmaster Tools and implement access/refresh-token handling. Official guides: <a href="https://learn.microsoft.com/en-us/bingwebmaster/getting-access">https://learn.microsoft.com/en-us/bingwebmaster/getting-access</a> and <a href="https://learn.microsoft.com/en-us/bingwebmaster/oauth2">https://learn.microsoft.com/en-us/bingwebmaster/oauth2</a> .</p>
+<p><strong>Documented AI report.</strong> Bing AI Performance describes visible citations across Microsoft Copilot, Bing AI summaries, and selected partner experiences. Its grounding queries describe retrieval phrases. Citation activity does not measure rank, authority, or causal effect from a content change. Source: <a href="https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c">https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c</a> .</p>
+<p><strong>Unverified dependency.</strong> The existence of the AI Performance screen does not establish a documented public API for the same data. Until an endpoint and supported authentication are verified, use a clearly labelled customer-provided export/import or operator-assisted workflow. Do not scrape a logged-in dashboard and silently present it as a supported API integration. Ordinary Bing Webmaster search/crawl data can remain a separate supported connector capability.</p>
+<h2 id="section-34">6. WordPress publishing</h2>
+<p>For self-hosted WordPress, the documented remote authentication option is a revocable Application Password over HTTPS, tied to a WordPress user. Prefer a dedicated user with the minimum capability needed to create or publish the intended content. Never ask for the user&#39;s main administrator password. Documentation: <a href="https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/">https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/</a> and <a href="https://developer.wordpress.org/advanced-administration/security/application-passwords/">https://developer.wordpress.org/advanced-administration/security/application-passwords/</a> .</p>
+<p>Use the REST API posts, pages, and media resources as appropriate, with the standard /wp-json/wp/v2 base. Draft first; apply publication only after approval. Preserve native post IDs, previous content, current status, modified timestamp, and media relationships. WordPress plugins and themes can change rendered output; validate the preview and published URL instead of assuming a successful API response means a correct page.</p>
+<p>WordPress.com is a separate authentication variant. Its third-party OAuth flow supports WordPress.com and applicable Jetpack-connected sites. Application Passwords must not be sent directly to public-api.wordpress.com endpoints; use the supported OAuth token flow. Source: <a href="https://developer.wordpress.com/docs/api/getting-started/">https://developer.wordpress.com/docs/api/getting-started/</a> .</p>
+<h2 id="section-35">7. Google Ads: current onboarding and account access</h2>
+<p><strong>Verified change.</strong> Google&#39;s September 2026 migration sunsets developer tokens in favor of access levels attached to the Google Cloud project associated with OAuth credentials. The official announcement is dated September 10 and describes rollout beginning that day; token headers are optional and ignored under the new system. Some documentation summaries still retain old wording. Sources: <a href="https://ads-developers.googleblog.com/2026/09/new-onboarding-experience-for-google-ads-api.html">https://ads-developers.googleblog.com/2026/09/new-onboarding-experience-for-google-ads-api.html</a> and <a href="https://developers.google.com/google-ads/api/docs/api-policy/developer-token">https://developers.google.com/google-ads/api/docs/api-policy/developer-token</a> .</p>
+<p>Enable the API on the intended Cloud project and apply for the access level needed. Explorer supports limited production use, Basic permits 15,000 daily operations, and Standard increases daily capacity while other limits remain. Check current values at implementation: <a href="https://developers.google.com/google-ads/api/docs/api-policy/access-levels">https://developers.google.com/google-ads/api/docs/api-policy/access-levels</a> . OAuth authorization and account-level permissions remain necessary; project approval does not grant access to a customer&#39;s account.</p>
+<p>Use provider-native reporting queries and campaign mutations behind a capability-aware adapter. Preserve manager context where required, native customer identifiers, request IDs, budget units, account currencies, and timezone. Start read-only reporting and paused campaign preparation before enabling write operations. Eligibility for AI search inventory must not be represented as guaranteed AI-only placement or guaranteed separately measurable inventory without documented controls.</p>
+<h2 id="section-36">8. Microsoft Advertising</h2>
+<p>Unlike Google Ads, Microsoft Advertising still documents a developer token requirement. Requests also require an OAuth user access token and relevant account/customer identifiers. Its current quickstart supports Microsoft OAuth and Google OAuth for supported sign-in scenarios. Sources: <a href="https://learn.microsoft.com/en-us/advertising/guides/get-started?view=bingads-13">https://learn.microsoft.com/en-us/advertising/guides/get-started?view=bingads-13</a> and <a href="https://learn.microsoft.com/en-us/advertising/guides/authentication-oauth-quick-start?view=bingads-13">https://learn.microsoft.com/en-us/advertising/guides/authentication-oauth-quick-start?view=bingads-13</a> .</p>
+<p>Use Campaign Management, Reporting, and Bulk services according to workload. Keep sandbox credentials separate from production. A developer token establishes API access but does not expand the user&#39;s account permissions. Design explicit account selection for agencies and verify the selected account before every write. Copilot inventory eligibility and placement reporting must be verified independently; an AI assistant inside the advertising dashboard is not itself advertising inventory.</p>
+<h2 id="section-37">9. Meta Marketing API</h2>
+<p>Meta&#39;s May 2026 announcement renamed Ads Management Standard Access to Marketing API Access Tier, with Limited and Full access labels. This controls enhanced access and quota-related capabilities and is separate from the ads_management permission. The announcement describes a threshold of 500 calls in the preceding fifteen days and error rate below fifteen percent over the latest 500 calls for the stated qualification criteria. Source: <a href="https://developers.meta.com/blog/updates-to-ads-management-standard-access-feature/">https://developers.meta.com/blog/updates-to-ads-management-standard-access-feature/</a> .</p>
+<p><strong>Unresolved before production.</strong> Confirm the exact current app-review, business-verification, permission, token, and access-tier requirements in Meta&#39;s current developer dashboard. This research did not establish every production requirement. The engineering spike must prove read access, paused-object creation, insights retrieval, and revocation against a permitted account. Treat campaign, ad set, creative, and ad objects distinctly. Keep Meta-reported attribution separate from other providers and never describe ordinary Facebook/Instagram placements as placements inside an AI assistant.</p>
+<h2 id="section-38">10. Klaviyo lifecycle integration</h2>
+<p>Klaviyo recommends OAuth for partner integrations. Its authorization-code flow uses PKCE and scoped permissions. Request metrics:read, campaigns:write, or other scopes only when the corresponding feature is active. Its documentation says an app need not be Marketplace-listed to share an installation URL, while listing submission has additional requirements. Source: <a href="https://developers.klaviyo.com/en/docs/set_up_oauth">https://developers.klaviyo.com/en/docs/set_up_oauth</a> .</p>
+<p>Token exchange and revocation use a.klaviyo.com; obsolete www token routing was blocked in 2025. OAuth apps receive a quota per installed app instance, while private-key integrations share account-level quota. Endpoints have burst and steady limits, and 429 responses include Retry-After. Sources: <a href="https://developers.klaviyo.com/en/reference/api_overview">https://developers.klaviyo.com/en/reference/api_overview</a> and <a href="https://developers.klaviyo.com/en/docs/rate_limits_and_error_handling">https://developers.klaviyo.com/en/docs/rate_limits_and_error_handling</a> .</p>
+<p>Phase four should begin with reporting and approved campaign preparation before automated sending. A purchase does not itself establish marketing subscription consent. Respect suppressions, subscription state, account capabilities, and campaign-send authorization. The first production acceptance test must include preventing a send when approval is absent or recipients are not eligible.</p>
+<h2 id="section-39">11. Release evidence and ownership</h2>
+<p>Each connector requires a named engineering owner, current documentation links, account-access evidence, a field map, scope inventory, quota budget, deletion behavior, failure runbook, and end-to-end test record. A connector is not production-ready because its OAuth button works. Acceptance requires successful initial import, incremental updates, restart recovery, rate-limit recovery, expired-token recovery, disconnect handling, tenant-isolation tests, and applicable approved-write/readback tests.</p>
+<p>Phase one should depend on Shopify catalogue, Search Console, and GA4; Bing remains optional. Phase two adds Shopify and WordPress publishing. Phase three activates advertising connectors independently as production access is demonstrated. Phase four adds Klaviyo lifecycle operations. External approvals must not block unrelated functionality, and unsupported data must be shown as unavailable rather than fabricated or silently substituted.</p>
+</section><section class="part"><div class="part-label">PART 4 / 7</div><h1 id="section-40">AI visibility, advertising APIs, and evidence requirements</h1>
+<p>Research checked 24 October 2026. Statements labelled <strong>Verified</strong> describe published documentation; <strong>Product requirement</strong> describes what this product should implement. Availability must also be checked against the customer&#39;s actual account. A published API is not proof that every feature is enabled for every advertiser.</p>
+<h2 id="section-41">OpenAI advertising: documented integration surface</h2>
+<p><strong>Verified:</strong> OpenAI publishes an Advertiser API for account inspection, campaigns, ad groups, ads, product feeds, conversion configuration, and reporting. Requests use a server-held advertiser credential. The hierarchy is account → campaign → ad group → ad. Supported create operations accept idempotency keys. The base URL is <code>https://api.ads.openai.com</code>. The initial implementation should create resources paused, inspect serving/review issues, then activate only after the approved plan is satisfied. Source: <a href="https://learn.chatgpt.com/ads/api-overview">Advertiser API overview</a>.</p>
+<p><strong>Verified:</strong> API partner onboarding uses the client&#39;s account credential and requires access to the website and brand assets. Brand changes, pixel administration, and conversion-key creation may require additional account enablement. A 403 or a feature-specific 404 can therefore be an access issue, not a missing implementation. Source: <a href="https://learn.chatgpt.com/ads/api-partner-setup">API partner setup</a>.</p>
+<p><strong>Product requirement:</strong> Model connector capability at account level: <code>read_account</code>, <code>read_campaigns</code>, <code>create_campaign</code>, <code>create_ad</code>, <code>activate</code>, <code>upload_asset</code>, <code>manage_feed</code>, <code>manage_pixel</code>, <code>create_conversion_key</code>, and <code>read_insights</code>. Store a tested timestamp and evidence for each capability. The UI must show unavailable actions with their actual reason. Connection success alone must not unlock all features.</p>
+<p><strong>Verified:</strong> OpenAI&#39;s availability page lists India and the United Kingdom as available for self-service. Eligibility is tied to the legal entity being advertised and billed, not the location of the engineer connecting the account. Keep legal entity and target audience geography separate in onboarding. Source: <a href="https://help.openai.com/en/articles/20001245-ads-manager-availability">Ads Manager availability</a>.</p>
+<h2 id="section-42">Recommended OpenAI connector contract</h2>
+<p>The following is our internal interface, not a claim that these exact method names exist at OpenAI:</p>
+<table>
+<thead>
+<tr>
+<th>Internal operation</th>
+<th>External surface</th>
+<th>Product behaviour</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>inspectAccount</code></td>
+<td><code>GET /v1/ad_account</code></td>
+<td>Read account identity, currency, timezone, readiness and review state.</td>
+</tr>
+<tr>
+<td><code>createCampaignDraft</code></td>
+<td>Campaign create API</td>
+<td>Create paused; retain external identifier immediately.</td>
+</tr>
+<tr>
+<td><code>createAdGroupDraft</code></td>
+<td>Ad-group create API</td>
+<td>Attach approved bid configuration and context hints.</td>
+</tr>
+<tr>
+<td><code>uploadCreative</code></td>
+<td>Upload API</td>
+<td>Upload approved file only; retain content hash and provider file ID.</td>
+</tr>
+<tr>
+<td><code>createAdDraft</code></td>
+<td>Ad create API</td>
+<td>Bind approved creative and destination to correct group.</td>
+</tr>
+<tr>
+<td><code>previewAd</code></td>
+<td>Ad preview API</td>
+<td>Show provider preview when available; label local mockups accurately.</td>
+</tr>
+<tr>
+<td><code>inspectServingIssues</code></td>
+<td>Ad retrieval with serving issues</td>
+<td>Distinguish policy review, account readiness, configuration and delivery.</td>
+</tr>
+<tr>
+<td><code>activateResources</code></td>
+<td>Activate endpoints</td>
+<td>Execute only the approved resource list, then read back.</td>
+</tr>
+<tr>
+<td><code>fetchDeliveryReport</code></td>
+<td>Account/campaign/group/ad Insights</td>
+<td>Persist provider results and query metadata, not just calculated charts.</td>
+</tr>
+<tr>
+<td><code>fetchConversionReport</code></td>
+<td><code>POST /v1/conversions/insights</code></td>
+<td>Store attribution settings with the returned values.</td>
+</tr>
+</tbody></table>
+<p><strong>Product requirement:</strong> Copy the current official OpenAPI schema into a version-controlled generated client during implementation, pin its checksum, and add contract tests around used operations. Do not hand-invent writable fields. Keep provider errors and request IDs in redacted operational logs. Display a useful user error without exposing credentials or internal payloads.</p>
+<p><strong>Product requirement:</strong> A campaign launch is a recoverable sequence. If asset upload and campaign creation succeed but ad creation fails, save the successfully created resources, mark the launch partially completed, and resume safely. Never blindly restart the entire sequence. Use a stable idempotency key per intended external creation and immutable request payload. If the result is unknown after timeout, reconcile before retrying. Do not treat successful HTTP submission as successful serving.</p>
+<h2 id="section-43">Measurement and attribution</h2>
+<p><strong>Verified:</strong> General reporting supports impressions, clicks, spend, CTR, CPC and CPM, alongside goal conversions and attributed purchase outcomes. The reporting documentation includes <code>order_created_attributed_sales</code> and <code>order_created_roas</code>. These values depend on submitted purchase amounts. This is different from restrictions of the native ChatGPT Ads Manager plugin, which should not be used to infer limitations of the Advertiser API. Source: <a href="https://learn.chatgpt.com/ads/reporting">Reporting</a>.</p>
+<p><strong>Verified:</strong> The Insights API supports click windows of 7, 14 or 30 days and view windows of zero or one day. Defaults are independently 30-day click and one-day view. Time basis can use ad interaction time or conversion time. A customer comparing reports must use identical settings. Source: <a href="https://learn.chatgpt.com/ads/api-reference/insights">Insights API reference</a>.</p>
+<p><strong>Product requirement:</strong> Save every report with provider, account, currency, timezone, date range, aggregation, breakdown, click window, view window, time basis, fetched time, and API/schema version. Never overwrite a 7-day-click report with a 30-day-click report under the same natural key. Represent unavailable values as null and incomplete days as provisional. Backfill recent dates because conversions arrive later. A reported conversion should never be relabelled as an incremental sale.</p>
+<p><strong>Verified:</strong> OpenAI conversion measurement uses the <code>oppref</code> click reference and can use browser Pixel, server Conversions API, or both. The same conversion needs the same event ID across transports for deduplication. Modelled measurement can contribute to reported totals. Source: <a href="https://help.openai.com/en/articles/20001409-conversion-measurement">Conversion measurement</a>.</p>
+<p><strong>Verified:</strong> Server events use a stable <code>id</code>, event type, and millisecond event timestamp. Documented events include <code>order_created</code>, <code>lead_created</code>, <code>checkout_started</code>, <code>items_added</code>, and others. Event timestamps must be within seven days and no more than ten minutes in the future. Source: <a href="https://learn.chatgpt.com/ads/conversions-api">Conversions API</a>.</p>
+<p><strong>Product requirement:</strong> The conversion outbox should store business event time, consent status, destination account, transport state, attempt count, and immutable event ID. Reject expired events from automatic retry rather than silently changing their timestamp. Preserve <code>oppref</code> through permitted landing-page navigation and redirects. Keep sensitive matching data out of application logs. Track refund-adjusted commerce revenue independently; do not assume that an order refund automatically revises a platform&#39;s attributed-sales report.</p>
+<p><strong>Product requirement:</strong> The dashboard has separate, explicitly named measures: platform-attributed sales, observed Shopify orders, matched order value under our declared matching rules, and total net store sales. A person can inspect the definitions and reporting window behind each. Cross-platform attributed conversions must not simply be summed into unique orders. Reconciliation is an explanation layer, not a fabricated single truth.</p>
+<h2 id="section-44">AI visibility collection</h2>
+<p><strong>Product requirement:</strong> There are three different collection modes. First, official model API observations answer controlled research questions. Second, licensed consumer-interface observations measure the selected interface, locale and account conditions. Third, merchant-owned analytics and logs measure visits and bot activity. Every chart must identify its mode. A model API result cannot be presented as a universal ChatGPT ranking or a direct record of consumer exposure.</p>
+<p>Each observation must retain prompt text and version, language, target market, engine/product, model when known, collection mode, run time, response, extracted citations, extraction version, status, latency and cost. Mark failed or blocked runs as missing. Never count missing observations as zero brand mentions. Repeat sampled prompts over time because responses vary. Changing the prompt cohort requires a new comparison baseline or an explicit cohort filter.</p>
+<p>Entity matching needs aliases, merchant domains, product names and manual corrections. A brand name that is also a common noun needs review. Mention, citation, recommendation and positive sentiment are separate fields. A citation to a retailer selling the brand is different from a citation to the brand&#39;s own domain. Preserve the evidence needed to correct classifications later.</p>
+<p><strong>Product requirement:</strong> Initial visibility rate is successful observations mentioning the brand divided by successful observations in the declared cohort. Citation rate uses a separately declared denominator. Show sample count and collection coverage. A change in visibility is an observation, not proof that a recently published article caused it. Introduce controlled experiments only where traffic and operational constraints support a credible design.</p>
+<h2 id="section-45">Competitor implications</h2>
+<p><strong>Verified:</strong> Profound&#39;s OpenAI Ads integration advertises reading campaigns, ad groups, ads, files and reports, and relating paid performance to organic AI search performance. Therefore, simply combining paid and organic dashboards is already a competitive baseline. Source: <a href="https://www.tryprofound.com/integrations/openai-ads">Profound OpenAI integration</a>.</p>
+<p><strong>Verified:</strong> Profound says its prompt-volume product begins with real prompts from double-opt-in consumer panels and uses statistical modelling to scale results. Generated prompts are not an equivalent substitute for this data source. Source: <a href="https://www.tryprofound.com/features/prompt-volumes">Profound Prompt Volumes</a>.</p>
+<p><strong>Verified:</strong> Lapis markets ChatGPT campaign creation, approval and launch, creative tagging by buyer need and message, and confidence-adjusted CTR analysis. These are vendor claims rather than independently tested performance results. Source: <a href="https://www.trylapis.com/chatgpt-ads">Lapis ChatSense</a>.</p>
+<p><strong>Product requirement:</strong> Compete through merchant-specific product knowledge, approvals that agencies can operate across clients, reliable publication and campaign execution, explainable order reconciliation, and setup assistance. Do not claim that competitors lack these capabilities without evidence. Avoid cloning proprietary copy, design assets, datasets or branding. A shared functional category is enough to define the product direction.</p>
+<h2 id="section-46">Free data versus paid dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Realistic sourcing</th>
+<th>Planning treatment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Product facts and inventory</td>
+<td>Customer-authorized commerce API</td>
+<td>Customer owns data; integration/hosting still costs money.</td>
+</tr>
+<tr>
+<td>Search and website performance</td>
+<td>Authorized Search Console and analytics</td>
+<td>Quota-bound access; not a source of private AI conversations.</td>
+</tr>
+<tr>
+<td>Website content and schema</td>
+<td>Permitted crawling and customer uploads</td>
+<td>Open-source tooling possible; compute and maintenance remain costs.</td>
+</tr>
+<tr>
+<td>AI response observations</td>
+<td>Official model API</td>
+<td>Paid inference/search usage; cache carefully and meter by workspace.</td>
+</tr>
+<tr>
+<td>Consumer-interface monitoring</td>
+<td>Licensed vendor or permitted collection</td>
+<td>Procurement and access review needed; never assume unrestricted browser scraping.</td>
+</tr>
+<tr>
+<td>Real prompt demand volumes</td>
+<td>Licensed panels/data supplier</td>
+<td>Paid dependency; optional until access and rights are contracted.</td>
+</tr>
+<tr>
+<td>Campaign performance</td>
+<td>Customer&#39;s advertising account</td>
+<td>Access depends on account rights; media spend is separate.</td>
+</tr>
+<tr>
+<td>Competitor spend, sales and exact audience</td>
+<td>Generally unavailable from ordinary public APIs</td>
+<td>Do not fabricate; label any licensed estimates and methodology.</td>
+</tr>
+</tbody></table>
+<h2 id="section-47">Acceptance and pressure tests</h2>
+<ol>
+<li>An API credential is connected to the wrong client: account identity confirmation prevents storing it against an unrelated workspace.</li>
+<li>A campaign launch times out: retry does not create a second campaign; reconciliation identifies the existing resource.</li>
+<li>The client changes the destination after approval: approval becomes stale and launch is blocked until re-approved.</li>
+<li>The account lacks pixel-management capability: reporting remains available and the setup screen gives the real access limitation.</li>
+<li>A browser and server report one order: stable event identity yields one logical commerce event and deduplicated delivery.</li>
+<li>A report returns null ROAS: the UI says unavailable rather than zero performance.</li>
+<li>A model response omits the brand after five previously positive runs: the system records the observation without asserting that the brand was removed from the engine.</li>
+<li>A panel-data contract ends: prompt-volume features stop refreshing and retain licensed data only under the contract&#39;s retention rights.</li>
+<li>A campaign records high CTR but poor purchases: recommendations use the customer&#39;s goal and sufficient conversion evidence rather than optimizing clicks by default.</li>
+<li>A channel is unavailable in the advertiser&#39;s legal-entity country: the product blocks launch and offers a transparent unsupported state, without routing around eligibility.</li>
+</ol>
+</section><section class="part"><div class="part-label">PART 5 / 7</div><h1 id="section-48">Delivery plan, economics, and release control</h1>
+<h2 id="section-49">1. Product decision and boundaries</h2>
+<p>Working product name: Marketing OS. Company name and visual identity remain open. This specification restores the four-release strategy: Intelligence, Execution, Advertising, then Coordinated Operations. It is a product for commerce brands and the agencies they authorize. Shopify is the initial commerce integration, not a restriction on the long-term customer base. A website-only business can onboard with a URL and approved brand documents, but commerce-specific features remain unavailable until relevant data exists.</p>
+<p>The core promise is to help a team understand discovery, make approved improvements, operate paid acquisition, and measure commercial results. Forward-deployed delivery is a standard onboarding and implementation service. Engineers configure the shared product, install measurement, map customer data, and teach operators. Customer-specific work becomes reusable configuration or a supported connector whenever possible.</p>
+<p>This is a build specification, not a claim that integrations have been installed or that production access has been granted. Dates, staffing, limits, prices, and performance objectives below are planning assumptions. Vendor capabilities are documented in the integration appendices with source links. A released feature must have working access for its intended customer segment.</p>
+<p>We do not guarantee citations, rankings, ad delivery, customer acquisition cost, or revenue. Those outcomes depend on platforms, customer offers, budgets, and market conditions. We do guarantee that the product records its evidence, applies only authorized changes, reports failures clearly, and distinguishes observations from estimates.</p>
+<h2 id="section-50">2. Commercial model and packaging</h2>
+<p>Sell a recurring subscription per brand workspace with defined usage allowances. Offer an agency agreement with pooled administrative seats and explicit client-level usage allocation. The brand owns its data and connected accounts; the billing payer may be the brand or agency. Losing an agency relationship must not strand the brand&#39;s account or require transferring ad-account ownership.</p>
+<p>Separate four charges: onboarding/implementation, recurring software, consumption beyond allowance, and optional ongoing managed service. Advertising spend remains billed by the advertising platform to the advertiser. Avoid holding or reselling media funds in the first releases. Taxes and payment-provider eligibility must be reviewed for the selected incorporation and customer markets before selling; this plan does not select a legal entity.</p>
+<p>Initial packaging should expose monitored questions, engines, locations, run frequency, content generations, published assets, connected ad accounts, data retention, and seats. Do not advertise unlimited AI or unlimited monitoring. A monitoring unit is a successful provider observation with its associated metadata, not an arbitrary token count hidden from customers. Failed provider requests are not customer-billable unless a clearly disclosed contract says otherwise. Track actual vendor cost independently of customer billing.</p>
+<p>Plans unlock released modules. Do not charge for a future module solely because it appears on the roadmap. Publish upgrade and cancellation behavior before accepting payment. Downgrade prevents new over-limit work while preserving accessible historical work during the contracted retention period. It must not silently delete campaigns or stop external ads. Cancellation prompts the owner to choose how external workflows should be handled and records the result.</p>
+<h2 id="section-51">3. Success metrics and measurement definitions</h2>
+<p>The primary operational metric is the number of brands completing a verified, approved marketing action and reviewing its outcome during the month. This captures actual use beyond generating drafts. Track revenue retention and contribution margin alongside it. Neither one dashboard visit nor an AI-generated recommendation counts as completed customer value.</p>
+<p>Phase 1 metrics: connection completion, data freshness, valid observation coverage, time to first evidence-backed opportunity, weekly active operator, and report usefulness feedback. Phase 2: approved-to-published rate, publish failures, revisions per approved asset, verified restoration success, and post-publication outcome reviews. Phase 3: measurement readiness before launch, rejected creative rate, verified launch success, spend reconciliation, attributable conversions where available, and operator time per campaign. Phase 4: experiment completion, automation exception rate, action reversal rate, time saved, and incremental outcome evidence where experiments support it.</p>
+<p>Visibility share means brand mentions divided by valid observations within the specified fixed question set, engine, geography, and period. It is not market share. Citation share uses citations as its denominator and is separately labeled. Failed runs are excluded from the ratio and shown as missing coverage. Changing the tracked question set creates a new comparison cohort rather than rewriting history.</p>
+<p>Platform ROAS, when available, is platform-attributed conversion value divided by that platform&#39;s spend under its stated window. Store revenue and net revenue after refunds are separate measures. Never sum platform-attributed conversions across platforms into a purported count of unique orders. Currency conversion requires a timestamped rate source and explicit reporting currency. Keep original money amounts in integer minor units or exact decimals with currency; never floating-point arithmetic.</p>
+<h2 id="section-52">4. Step-by-step engineering sequence</h2>
+<p>The following is a planning baseline for three experienced full-time engineers, one product/design owner, and shared QA/forward-deployed capacity. Assume roughly 24–36 weeks for the four production releases, including hardening but excluding unpredictable external review delays. A solo developer should substantially reduce concurrent scope or extend the schedule. This is not a fixed-price delivery commitment.</p>
+<h3 id="section-53">Foundation and phase 1: approximately 7–10 weeks</h3>
+<ol>
+<li>Confirm initial supported country, language, commerce use case, reporting timezone, and payment-provider eligibility. Recruit a small group of paying design partners whose contracts accurately describe the released capability. Record account readiness rather than assuming it.</li>
+<li>Create the repository, environments, migrations, continuous integration, secret management, deployment pipeline, and architecture decision records. Deploy a working empty application and worker before building feature screens.</li>
+<li>Implement email authentication, organizations, brand workspaces, memberships, agency grants, billing ownership, audit history, and row-level security. Test cross-tenant access using two agencies sharing one brand and another unrelated brand.</li>
+<li>Implement the connector framework, OAuth callback protections, encrypted credentials, token refresh locking, capability flags, sync checkpoints, webhook inbox, and manual reconnection states.</li>
+<li>Integrate a Shopify development store, then authorized production access. Build paginated initial catalogue sync and delta updates. Handle uninstall, deletion, variants, publication state, and stale inventory. Begin public distribution and data permission processes immediately.</li>
+<li>Add Search Console and GA4 with property selection, separate scopes, backfill limits, quotas, and visible freshness. Confirm consent and measurement installation requirements for the first customer.</li>
+<li>Create brand facts with provenance and approval, competitor domains, question sets, locations, supported engines, and budgets. Implement the first permitted observation provider; save raw responses and collection method.</li>
+<li>Add website crawl controls, normalized pages, technical diagnostics, duplicate detection, evidence storage, and an opportunity-ranking system whose factors can be explained.</li>
+<li>Build overview, visibility, evidence drawer, opportunities, integrations, agency portfolio, reports, and settings. Complete subscription entitlements and usage limits.</li>
+<li>Run security, recovery, data-quality, accessibility, and tenant-isolation checks. Complete a full forward-deployed onboarding. Launch only when failures and missing coverage are visible and recoverable.</li>
+</ol>
+<h3 id="section-54">Phase 2: approximately 5–8 weeks</h3>
+<ol start="11">
+<li>Implement content briefs, source references, immutable versions, editorial assignments, structured brand rules, and generation cost budgets.</li>
+<li>Build editor, review comments, diffs, previews, approval expiration, scheduling, and exact-version authorization.</li>
+<li>Implement Shopify content publishing with read-before-write conflict checks, after-write verification, and restoration from saved versions. Do not bypass theme permissions; use supported surfaces.</li>
+<li>Add WordPress publishing, media handling, post status transitions, and rollback semantics. A failed image upload must not become a partially published article without explicit recovery handling.</li>
+<li>Add landing-page templates, internal link proposals, structured-data validation tasks, and external technical-task handoffs. Customer DNS and theme changes require explicit implementation scope.</li>
+<li>Connect published asset versions to subsequent observations and visits. Show timing and confounders, not causal claims based solely on before/after charts. Test concurrent editing and stale approval before release.</li>
+</ol>
+<h3 id="section-55">Phase 3: approximately 6–10 weeks</h3>
+<ol start="17">
+<li>Complete ad-platform access proofs started in phase 1. Implement ChatGPT first, then a second channel based on verified customer demand and developer access; do not build three write integrations simultaneously.</li>
+<li>Implement account capabilities, campaign hierarchy, native targeting settings, creative uploads, feed validation, paused drafts, policy status, preview, and exact-budget approval.</li>
+<li>Install conversion collection appropriate to consent and platform requirements. Add event deduplication, order/refund linkage, event-time and reporting-time reconciliation, and reporting-window labels.</li>
+<li>Implement the execution state machine, per-account locking, idempotency, readback, partial-failure handling, emergency pause, and account-level kill switch. Test ambiguous provider timeouts before permitting live launch.</li>
+<li>Build campaign reporting, daily cost checks, anomaly flags, creative comparisons, and recommendations. Verify totals against provider dashboards on a documented sample and explain residual differences.</li>
+<li>Release each channel only after successful end-to-end operation on an authorized account. Unsupported geography or account access stays explicitly unavailable. Manual import/export can be a labeled operating mode, never disguised as live synchronization.</li>
+</ol>
+<h3 id="section-56">Phase 4: approximately 6–8 weeks, then iterative expansion</h3>
+<ol start="23">
+<li>Add shared campaign calendars, experiments, customer-defined goals, cross-channel tasks, and inventory-aware recommendations.</li>
+<li>Add Klaviyo and CRM connectors after agreeing which objects and actions are useful. Begin with read-only insight and approved drafts before enabling sends or workflow edits.</li>
+<li>Add bounded rules, simulation, dry runs, approval thresholds, maximum spend, cooldowns, and circuit breakers. Show why a rule fired and which evidence it used.</li>
+<li>Add agency templates and reporting customization, customer webhooks/API, export, retention controls, and portfolio administration. Preserve tenant boundaries in every template and aggregate.</li>
+<li>Conduct operational drills and profitability review. Increase automation only for actions with proven reversibility, reliable measurement, and sufficiently bounded financial impact.</li>
+</ol>
+<h2 id="section-57">5. Cost model and capacity planning</h2>
+<p>Infrastructure subscriptions are the smallest and most predictable part of early costs. A starting Supabase Pro subscription and Railway Pro minimum were previously checked at approximately USD25 and USD20 per month respectively, but usage, additional environments, storage, email, observability, and support raise the actual amount. Recheck vendor pricing before purchase. Development credits and free tiers are not production service guarantees.</p>
+<p>Use this monitoring equation: brands × questions × engines × locations × runs per day × repetitions × days. Example: 10 brands × 50 questions × 3 engines × 1 location × 1 daily run × 1 repetition × 30 days = 45,000 observations per month. At an illustrative all-in observation cost of USD0.005, that is USD225; at USD0.03, USD1,350. Those unit costs are sensitivity assumptions, not vendor quotes. Three repetitions triple the observation cost. Two locations double it again.</p>
+<p>Monthly variable costs also include input/output tokens for drafts, extraction calls, search tool fees, embeddings where needed, image generation, crawling, browser runtime, storage, egress, payment fees, and support time. Record estimated cost before scheduling large work and actual cost after completion. A per-brand hard cap pauses additional optional runs and notifies an owner. It must not silently disable required security, billing reconciliation, or ad-spend monitoring.</p>
+<p>Maintain a contribution-margin report per brand: subscription revenue less directly attributable inference, collection, infrastructure allocation, payment fees, and delivery/support labor. Before setting public prices, run realistic workloads for at least a small representative cohort. Forward-deployed onboarding has an hours budget, an agreed completion definition, and an escalation path for custom requests.</p>
+<p>Use open-source components where they reduce ongoing effort: Next.js, TypeScript, Postgres, pg-boss, Zod, Playwright, and a standard UI component library. They still incur engineering and compute costs. Avoid adding a separate vector database, Redis, workflow platform, data warehouse, or third-party OAuth broker until a measured need justifies the extra operational surface. A managed connector broker can become useful later; it does not remove platform app reviews or permissions.</p>
+<h2 id="section-58">6. Release gates and operational ownership</h2>
+<p>Every release needs a named engineering owner, product owner, and operational responder. Maintain a release checklist with evidence links, not checkboxes based on memory. A feature is complete only when authorization, success, failure, loading, empty, stale, reconnect, and recovery states work.</p>
+<p>Proposed service objectives for initial production: 99.5% monthly application availability; API request latency under 1 second at p95 for ordinary cached reads excluding upstream calls; immediate queued acknowledgement for long-running tasks; and daily integrations fresh within the published connector window. These are internal targets, not customer SLAs until measured. Define restore objectives based on purchased backup capability; target restoration within 8 hours and no more than 24 hours of database loss initially, with stronger recovery required before high-volume financial automation. Backups must include object-storage recovery strategy and credentials handling, not just database rows.</p>
+<p>Phase 1 gate: isolation tests pass; billing webhooks reconcile; all evidence is traceable; connector outages are visible; a restore drill succeeds. Phase 2 gate: unapproved or modified drafts cannot publish; remote conflicts are detected; supported restoration is verified. Phase 3 gate: spending cannot start without valid authorization; ambiguous execution is reconciled; budget caps and emergency pause are exercised; reporting differences are documented. Phase 4 gate: every automated action has a policy version, dry-run evidence, cooldown, cap, and kill switch; a responder can identify and stop a faulty rule quickly.</p>
+<p>Do not treat a passing unit-test suite as proof of these gates. Retain test artifacts, authorized-account readbacks, reconciliation reports, and incident drill results.</p>
+<h2 id="section-59">7. Forward-deployed operating playbook</h2>
+<p>Discovery: agree commercial goals, product categories, approved claims, competitor set, geographic market, baseline metrics, and team roles. Installation: connect the minimum required accounts, install consent-compatible measurement, select products, and run data reconciliation. Configuration: set monitoring budgets, editorial rules, approval matrix, account permissions, notifications, and retention. Enablement: walk the customer&#39;s operator through a real evidence-to-action workflow and recovery flow. Handover: deliver a configuration record, connector ownership map, support channel, and weekly operating checklist.</p>
+<p>The initial onboarding is complete when a customer can access their workspace, explain its data limitations, locate an actionable recommendation, approve only what their role permits, and understand the outcome. In later phases it also includes a verified publish or campaign launch. Never use shared human credentials as the standard integration method. Support impersonation, if ever built, must be short-lived, explicitly authorized, visible, and audited; read-only diagnostics should be the default.</p>
+<p>Implementation requests are classified as configuration, reusable connector enhancement, or paid bespoke work. Bespoke work cannot silently enter the core release backlog. Customer data cannot be reused across brands for model context or agency templates without explicit permission.</p>
+<h2 id="section-60">8. Pressure-test register</h2>
+<table>
+<thead>
+<tr>
+<th>Failure or challenge</th>
+<th>Product/engineering response</th>
+<th>Required evidence before launch</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Why pay instead of native tools?</td>
+<td>Cross-client approvals, brand context, commerce measurement, connected execution, and implementation support</td>
+<td>Timed workflow comparison with customers; willingness to pay</td>
+</tr>
+<tr>
+<td>API answers differ from consumer products</td>
+<td>Label collection surface, model, location method, date, and uncertainty</td>
+<td>Sample raw observations and provenance visible</td>
+</tr>
+<tr>
+<td>Profound-style demand data is unavailable free</td>
+<td>Use customer queries and labeled hypotheses; buy licensed demand only when economics support it</td>
+<td>No synthetic volume represented as measured demand</td>
+</tr>
+<tr>
+<td>Shopify or ad access review delayed</td>
+<td>Begin access work early; release only verified capabilities; keep connector flags</td>
+<td>Approved access and successful authorized-account test</td>
+</tr>
+<tr>
+<td>Agency loses client</td>
+<td>Revoke its grant; preserve brand ownership and billing handover</td>
+<td>Revocation test stops UI and queued execution</td>
+</tr>
+<tr>
+<td>External write succeeds but response times out</td>
+<td>Mark outcome unknown, reconcile remote state, do not blindly retry</td>
+<td>Fault-injection test yields no duplicate external object</td>
+</tr>
+<tr>
+<td>Editor changes content after approval</td>
+<td>Bind authorization to immutable version and settings hash</td>
+<td>Old approval cannot execute new content</td>
+</tr>
+<tr>
+<td>Report double-counts orders</td>
+<td>Keep platform attribution separate and reconcile canonical order IDs</td>
+<td>Repeated cross-channel conversion fixture</td>
+</tr>
+<tr>
+<td>Inventory changes before campaign launch</td>
+<td>Recheck relevant eligibility and availability immediately before execution</td>
+<td>Sold-out product cannot pass configured launch policy</td>
+</tr>
+<tr>
+<td>AI invents a product claim</td>
+<td>Restrict drafts to approved facts; flag unsupported claims; editorial approval</td>
+<td>Evaluation suite includes prohibited and unsupported claims</td>
+</tr>
+<tr>
+<td>Prompt injection in a crawled page</td>
+<td>Treat external text as data; no authority to call publishing/spend tools</td>
+<td>Malicious-page tests cannot trigger an action</td>
+</tr>
+<tr>
+<td>Crawl target accesses private network</td>
+<td>Restrict protocols and destinations; revalidate redirects and DNS</td>
+<td>SSRF tests block private and metadata addresses</td>
+</tr>
+<tr>
+<td>Monitoring costs exceed subscription</td>
+<td>Estimate before queueing, meter by brand, enforce caps, control run matrix</td>
+<td>Load and cost simulation at target scale</td>
+</tr>
+<tr>
+<td>Customer cancels while ads still spend</td>
+<td>Explicit account-exit workflow; platform remains billing authority</td>
+<td>Offboarding checklist confirms external-state choices</td>
+</tr>
+<tr>
+<td>Before/after lift is claimed as causal</td>
+<td>Label correlation; use controlled experiments when feasible</td>
+<td>Reports distinguish attributed and incremental outcomes</td>
+</tr>
+<tr>
+<td>Excessive scope blocks first launch</td>
+<td>Fixed phase gates, vertical slices, connector order, change control</td>
+<td>One complete paid workflow before parallel expansion</td>
+</tr>
+</tbody></table>
+<h2 id="section-61">9. Initial backlog and decision log</h2>
+<p>The first engineering milestone is a complete secure slice: user logs in, creates a brand, invites an agency member, connects a development store, synchronizes products, sees sync status, and loses access immediately when revoked. It exercises tenancy, credentials, queues, webhooks, and UI before AI complexity is introduced.</p>
+<p>Decisions already made: web first; Next.js/Supabase/Railway; one modular codebase; separate worker runtime; Shopify-first commerce; agencies supported from phase 1; human approval for publication and spend; brand-owned workspaces; original four-release sequence; forward-deployed installation; measured usage; explicit evidence provenance.</p>
+<p>Decisions required before implementation procurement: incorporation/payment eligibility; first sales geography; production data region; first two observation providers and their collection rights; first design partners; supported languages; contract retention; paid vendor spending ceiling; intended support hours. These are owner decisions, not reasons to pause schema, UX, and development-store work.</p>
+<p>Maintain an architecture decision record for each consequential choice: question, options, selected answer, evidence, tradeoffs, reversal cost, and revisit trigger. Any change to phase order, tenant ownership, approval semantics, attribution definitions, or API access assumptions requires updating this PRD and its acceptance tests together.</p>
+<h2 id="section-62">10. Data lifecycle, security, and customer trust</h2>
+<p>Choose the production data region before customer onboarding and document subprocessors, storage locations, model providers, and data transfers in customer-facing terms. Collect only fields needed for the promised workflow. Product catalogue ingestion should not automatically import customer emails or full order addresses. Customer data requirements are connector-specific and must be reviewed against provider policy and applicable obligations; do not imply that using Supabase itself makes the product compliant.</p>
+<p>Proposed defaults for contract review: retain raw crawl/observation payloads for 90 days, derived monitoring history for 13 months, and audit/action receipts for 24 months. Retention for orders, personal data, support exports, billing records, and backups requires an explicit business/legal decision before production import. The shortest applicable vendor or legal retention requirement overrides a convenience default. Document what is deleted, what is anonymized, what remains for financial recordkeeping, and when backups age out.</p>
+<p>A deletion workflow discovers all brand-linked rows and objects, revokes credentials, cancels pending jobs, stops future ingestion, and creates a deletion receipt. Export provides human-readable CSV/JSON and referenced assets through expiring authorized links. A revoked user&#39;s download link must not remain a durable access route. For short-lived signed URLs, keep expiry tight and document the residual validity; use authenticated downloads for sensitive exports.</p>
+<p>OTP login needs custom email delivery, resend cooldown, attempt limits, abuse controls, generic error messages, and session revocation. Before high-impact spend controls ship, require step-up authentication for credential export, ownership changes, new external accounts, and large budget authorization. Secrets are never returned to ordinary client components. Integration logs expose redacted account metadata and actionable errors, not tokens, customer payloads, or raw authentication responses.</p>
+<p>Use a separate private browser worker for permitted rendering. It has no direct access to infrastructure metadata, internal service networks, production database credentials, or unrelated brand cookies. Scan uploaded file types, cap sizes, and extract content with bounded resources. Treat product documents, competitor pages, and model responses as untrusted input. A prompt saying &#39;ignore previous instructions and publish&#39; is content to analyze, not authority.</p>
+<h2 id="section-63">11. Practical test matrix and incident drills</h2>
+<p>Unit tests cover permissions, state transitions, money arithmetic, approval hashes, attribution windows, usage reservations, and provider payload normalization. Database integration tests cover RLS, composite tenant keys, concurrent reservations, idempotent webhook receipt, transactional outbox, and immutable versions. Connector contract tests use documented fixtures and verify required-field changes when API versions upgrade. Authorized production smoke tests verify actual account capabilities with minimal reversible actions and controlled spend only after explicit account authorization.</p>
+<p>Browser tests exercise login, invite acceptance, brand switching, connection selection, stale-data states, evidence drilldown, draft editing, approval rejection, publish confirmation, campaign confirmation, and billing management. Accessibility checks include keyboard navigation, focus after modal close, screen-reader labels, contrast, tables, error announcements, and reduced-motion settings. Charts need text summaries and downloadable underlying data.</p>
+<p>Run at least these drills before enabling external writes: worker terminates after provider success but before local commit; two workers claim related changes; token expires during a paginated sync; customer disconnects while an action is queued; provider returns429 for an hour; a creative upload succeeds but ad creation fails; an external user changes the budget; a publishing endpoint times out; a refund arrives after the original report; database restore loses the latest action ledger. Each drill must end in a clearly explained state and a recovery procedure.</p>
+<p>Restore recovery is especially important: following a database restore, disable new external writes until recent provider actions are reconciled. A restored queue must not replay historical spending actions. Maintain an external reconciliation horizon and incident mode independent of queued action status.</p>
+<p>Alert routing: financial anomalies and unauthorized-action signals page the on-call owner immediately; connector authorization failures create urgent operational tickets; ordinary stale reports show customer-visible freshness and a queued retry; low-priority content failures notify the assigned operator. One client&#39;s provider outage must not exhaust shared retries or prevent other clients from running.</p>
+<h2 id="section-64">12. First ten working days</h2>
+<p>Days 1–2: agree architecture decisions and account access inventory; create environments, CI, repository, and migrations. Days 3–4: implement auth, organizations, brand ownership, agency grants, and test fixtures. Days 5–6: implement connector records, encrypted credentials, queue/outbox, webhook receipt, and audit events. Days 7–8: synchronize one development-store catalogue with pagination and restart recovery. Days 9–10: build the catalogue and connection-health screens; demonstrate revocation, webhook replay, permission failure, and recovery. Deliver the first complete engineering slice and revise estimates using actual throughput.</p>
+<p>After this milestone, extend that proven foundation into the phase 1 workflows. Do not begin four independent applications, and do not create a general-purpose autonomous agent before deterministic permissions and execution infrastructure work.</p>
+<p>Pricing references checked 24 October 2026: <a href="https://supabase.com/pricing">Supabase pricing</a>, <a href="https://railway.com/pricing">Railway pricing</a>, <a href="https://resend.com/pricing">Resend pricing</a>. Provider pricing may change; the capacity model above is the budget decision tool.</p>
+</section><section class="part"><div class="part-label">PART 6 / 7</div><h1 id="section-65">Final decisions after pressure testing</h1>
+<p>These decisions are part of the requirements and resolve the tradeoffs identified in the independent review. The review at the end retains its test cases; none is claimed to have passed before implementation.</p>
+<ol>
+<li><strong>Release order remains Intelligence → Execution → Advertising → Coordinated Operations.</strong> The first launch is not ads-only. Each release has independent billing value and a readiness gate.</li>
+<li><strong>Phase 1 activation is a connected source, reviewed baseline, and accepted or assigned evidence-backed opportunity.</strong> Verified published actions become the primary operational measure from phase 2. Off-platform work is explicitly labeled customer-reported.</li>
+<li><strong>Named first connectors:</strong> phase 1 Shopify catalogue, Search Console, GA4, and one permitted AI-observation adapter; phase 2 Shopify publishing; phase 3 OpenAI advertising; phase 4 parameterized workflow templates. WordPress, Bing, Google Ads, Microsoft Ads, Meta, and Klaviyo ship as separately gated expansions in their assigned phases. Their access reviews begin early.</li>
+<li><strong>Agency-created workspaces begin unclaimed.</strong> An authorization attestation and verified invitation/claim process establish the brand owner. Credentials do not prove ownership. Conflicts require audited human resolution; email-domain matching never transfers ownership automatically.</li>
+<li><strong>Approvals bind exact content, account, destination, settings, budget and version.</strong> Revoking an approver&#39;s authority invalidates pending execution by default. Workers recheck authority before each consequential step.</li>
+<li><strong>A kill switch stops our new actions immediately; vendor-side spend stops only after confirmed provider action or native limits.</strong> Emergency pause has requested, confirmed, and unknown states. Provider outages trigger owner escalation. No zero-overspend promise is made.</li>
+<li><strong>Database recovery freezes all external writes.</strong> Reconcile the affected interval against providers before restarting. Before phase 3, purchase and test suitable recovery capability and maintain separately recoverable action receipts; idempotency keys must survive queue loss. Database backups alone are insufficient.</li>
+<li><strong>Requested geography and observed geography are separate fields.</strong> API prompt wording does not establish geographic representativeness. Surface, model, parser, and cohort changes are annotated in comparisons. Consumer-interface data requires verified rights and methodology.</li>
+<li><strong>Landing pages initially publish on the customer&#39;s supported platform.</strong> We do not add a separate hosted-site service in phase 2. Preview access, assets, canonical URL, redirects, ownership, and restoration are connector-specific. Arbitrary theme modification remains outside the default connector scope.</li>
+<li><strong>Phase 4 starts with parameterized workflows, not an arbitrary workflow builder.</strong> Initial templates: weekly client report, approval reminder, stale-stock alert, delivery diagnostic, and approved campaign change. Custom code, arbitrary branching and user-created autonomous agents are separate future scope.</li>
+<li><strong>Consent is part of the event contract.</strong> Each conversion includes schema version, immutable ID, event time, source, order reference where relevant, permitted identifiers, collection/dispatch consent state, and destination. Refunded, unmatched and modeled results remain distinguishable.</li>
+<li><strong>Essential reconciliation, security and emergency operations continue during billing suspension under bounded internal budgets.</strong> Optional generation and new campaigns stop. Subscription cancellation does not automatically cancel external campaigns.</li>
+<li><strong>Deletion includes derived data.</strong> Maintain source lineage across chunks, drafts, reports, snapshots and processor requests, and tombstones against accidental re-import. Contractual retention and backup expiry are explicit.</li>
+<li><strong>AI evaluation is a release gate.</strong> Use at least 100 reviewed fixtures before generation release, spanning stale facts, ambiguous claims, wrong currency, forbidden claims, cross-brand leakage, and malicious source text. Critical permission and unsupported-action tests require zero failures; deterministic factual fields must match their source. Human reviewers score usefulness separately. Expand the fixture set after every material failure. These are proposed test requirements, not achieved performance claims.</li>
+<li><strong>The 24–36 week estimate is conditional.</strong> It assumes three experienced engineers plus product/design and QA/implementation support. Reserve approximately 20% of engineering capacity for hardening, support, and API changes; re-estimate after the first complete connector. Release gates take precedence over calendar dates.</li>
+</ol>
+<p>The unresolved decisions are commercial and operational: incorporation/payment eligibility, first market, data region, collection-provider procurement, support coverage, contracted retention, and staffing. They have named owner roles in the delivery section and do not prevent the initial secure catalogue slice from starting.</p>
+</section><section class="part"><div class="part-label">PART 7 / 7</div><h1 id="section-66">Independent pressure test and required resolutions</h1>
+<p>Review scope: product direction and the delivery/AI-channel specifications. Findings below are design requirements, not claims that the implementation has passed tests. Severity P0 blocks the relevant release; P1 must be resolved before the affected capability ships; P2 is a planned enhancement. A written mitigation is not equivalent to successful validation.</p>
+<h2 id="section-67">Release-blocking findings</h2>
+<h3 id="section-68">R01 · P0 · Database recovery can replay already executed financial actions</h3>
+<p>The general phase-one recovery target permits up to 24 hours of database loss. That is insufficient as the only safety mechanism once external advertising actions are enabled: restoring an older database can remove evidence that an external action succeeded while leaving the campaign live at the provider.</p>
+<p>Required resolution: after any restore or suspected ledger loss, start all external mutations disabled. Reconcile every affected account and action interval against the provider before re-enabling workers. Preserve stable provider idempotency keys outside transient queue state; keep a separately recoverable append-only action receipt trail. Prefer point-in-time recovery before financial execution, but do not treat PITR alone as proof of consistency. Never auto-replay stale mutation jobs after restore.</p>
+<p>Acceptance test: execute a campaign activation, restore a database snapshot predating activation, and show that the recovery process detects the live campaign and does not duplicate creation or activation work. Record the recovered authorization and external-state reconciliation.</p>
+<h3 id="section-69">R02 · P0 · A local budget cap cannot guarantee provider spend stops instantly</h3>
+<p>An application cap, queue lock, or polling alert cannot prevent all provider-side spending between syncs, during an outage, or after credentials are revoked. A kill switch can immediately block our new actions; stopping already-running media requires a successful provider action or native platform limit.</p>
+<p>Required resolution: distinguish local execution limits, provider-native budget settings, account spend limits, and reporting lag. Use native limits where supported. Show confirmed pause separately from pause requested/unknown. Do not claim zero overspend or instantaneous stop. Define escalation to the account owner when our connector cannot stop a live campaign.</p>
+<p>Acceptance test: simulate provider outage during emergency pause. UI must show unresolved external state, prevent further local mutations, expose affected accounts, and provide an operational escalation path.</p>
+<h3 id="section-70">R03 · P0 · Account ownership and agency creation need an explicit authority model</h3>
+<p>Brand-owned workspaces are correct, but an agency may create a client workspace before the brand owner joins. A connected account credential proves access, not legal ownership of the brand or unlimited authority to delegate access.</p>
+<p>Required resolution: introduce an agency-created, unclaimed workspace state. Require a documented authorization attestation, verified brand-owner invitation/claim process, and explicit distinction between agency payer and brand owner. Disputes go through an audited support process; no automated ownership transfer based solely on email-domain matching. A pending ownership claim must not silently transfer credentials.</p>
+<p>Acceptance test: two agencies claim the same brand, and a third-party consultant holds ad-account access. The system must preserve existing authority, flag conflicting claims, and avoid automatic data disclosure or account transfer.</p>
+<h3 id="section-71">R04 · P0 · Runtime authorization must survive revocation and concurrent changes</h3>
+<p>Checking approval when a job is queued is not enough. Agency membership, brand permissions, approval revision, account readiness, and remote resource state can change before execution.</p>
+<p>Required resolution: check authorization immediately before the external call, bind it to the exact immutable payload/account/resource, and use bounded leases or locking for concurrent execution. For long multi-step launches, recheck between consequential steps. Define what happens when an approver loses authority after approval: default to invalidating pending execution unless the brand&#39;s explicit policy says otherwise.</p>
+<p>Acceptance test: revoke the agency grant between creative upload and activation. No further external mutation may occur, and already-created paused resources remain visible for owner recovery.</p>
+<h2 id="section-72">High-priority gaps</h2>
+<h3 id="section-73">R05 · P1 · Four phase estimates and promised scope need reconciliation</h3>
+<p>The current per-phase ranges total 24–36 weeks, which is arithmetically consistent. However, three engineers delivering multiple integration reviews, a mature editorial experience, attribution, lifecycle execution, and agency operations in that period is a planning hypothesis. Connector review timelines and customer-specific installation can dominate the critical path.</p>
+<p>Resolution: use release gates, not dates, as commitment criteria. Limit each phase to named first connectors, then list independently released expansion connectors. Track integration access, engineering, UX, security review, and customer validation as separate workstreams. Reserve explicit capacity for support and external API changes. Re-estimate after the first fully implemented connector and a real onboarding.</p>
+<h3 id="section-74">R06 · P1 · Phase-one primary metric should not depend on later publishing</h3>
+<p>The primary metric refers to a verified approved marketing action and outcome review. Phase one is mainly intelligence and does not execute publication or campaigns.</p>
+<p>Resolution: define phase-one activation as a verified connection, reviewed baseline, and accepted/assigned evidence-backed opportunity. The broader completed-action metric becomes primary after phase two. Avoid inventing off-platform completion evidence; allow customer-reported completion with that label.</p>
+<h3 id="section-75">R07 · P1 · Monitoring geography can be configured without being delivered</h3>
+<p>A locale string in a prompt is not a geographically representative consumer session. Licensed observations may also have imperfect location or account controls.</p>
+<p>Resolution: store requested geography and verified collection geography separately. Show unsupported geography as unavailable; do not infer location fidelity from prompt wording. Keep API, consumer-interface, and owned-analytics cohorts separate. Model/version changes and parser revisions need comparison annotations.</p>
+<p>Acceptance test: a provider ignores geographic settings or does not expose location. The observation remains usable for its actual collection mode but cannot be labeled a verified local consumer result.</p>
+<h3 id="section-76">R08 · P1 · Statistical confidence and low sample sizes require defined behavior</h3>
+<p>Visibility changes, creative comparisons, and automated optimization can amplify noise. A dashboard with one observation per question does not justify strong causal or statistical conclusions.</p>
+<p>Resolution: show sample counts and missingness, distinguish descriptive changes from tested effects, and define minimum evidence requirements per recommendation. Experiment registration must include primary metric, allocation unit, stopping rules, and contamination risks. Suppress confident winner labels when evidence is insufficient. Do not bolt generic significance scores onto non-independent AI observations.</p>
+<h3 id="section-77">R09 · P1 · Attribution identity and consent are incomplete without an event contract</h3>
+<p>Stable IDs prevent duplicate transport, but they do not automatically establish user consent, cross-device identity, or a valid connection between an ad click and order.</p>
+<p>Resolution: specify event name, schema version, event time, source, order ID, consent state at collection and dispatch, provider destination, identifier normalization, and retention. Do not infer permission for marketing emails from a purchase. Limit customer identifiers to the specific approved purpose. Unmatched orders remain unmatched. Record refunds separately from platform conversion revisions.</p>
+<p>Acceptance test: consent is absent or withdrawn before dispatch, an order is refunded, and a duplicate browser/server event arrives. The system respects dispatch policy, deduplicates logical events, and updates commerce outcomes without rewriting historical provider attribution.</p>
+<h3 id="section-78">R10 · P1 · AI factual checks need a measurable evaluation gate</h3>
+<p>Grounded generation and editorial approval are good requirements, but a model checking another model is not sufficient proof that claims are correct.</p>
+<p>Resolution: use deterministic checks for prices, currencies, availability, numeric specifications, required disclosures, and prohibited claims where possible. Maintain a reviewed fixture set spanning easy, ambiguous, adversarial, and stale inputs. Define release thresholds before evaluation, preserve failures, and prevent model upgrades from silently changing production behavior. Unknown claims must remain flagged rather than being converted to approved facts by the generation pipeline.</p>
+<h3 id="section-79">R11 · P1 · Credential lifecycle and support access need operational detail</h3>
+<p>Encrypted tokens alone do not solve compromised support access, refresh races, lost keys, or accidental exposure in error tracking.</p>
+<p>Resolution: specify key rotation, reconnect behavior, token-revocation response, secret redaction, privileged access approval, support-session expiry, audit retention, and incident owner. Add OTP abuse limits and invitation expiry. Ad-spend authorization should support step-up authentication for sensitive actions even if ordinary login is email OTP.</p>
+<p>Acceptance test: stolen session, replayed OAuth state, expired invitation, concurrent refresh, and revoked credential all fail safely without cross-client leakage.</p>
+<h3 id="section-80">R12 · P1 · Billing must not interrupt safety operations</h3>
+<p>Suspension and cost limits should prevent optional new work, but stopping reconciliation, external-state visibility, or incident notifications could leave live campaigns unmanaged.</p>
+<p>Resolution: identify essential operational jobs that continue during billing grace/suspension, with bounded internal cost. Provide emergency controls and export access according to contract. A subscription cancellation is not an advertising cancellation. Make that distinction explicit during offboarding and preserve the customer&#39;s selection.</p>
+<h3 id="section-81">R13 · P1 · Content restoration and landing-page hosting are distinct products</h3>
+<p>Publishing to Shopify/WordPress, restoring prior content, and hosting new landing pages involve different permissions and operational responsibilities. Themes, plugin-generated HTML, media, redirects, and SEO metadata may not restore as one atomic unit.</p>
+<p>Resolution: define a connector capability matrix for create/update/delete/restore/preview and a separate landing-page deployment strategy. Start with customer-platform templates where feasible. Specify domain ownership, redirects, asset retention, preview access, canonical URLs, and broken-link checks. Use compensation and manual recovery where true rollback is impossible.</p>
+<h3 id="section-82">R14 · P1 · Data deletion must include derived artifacts and backups policy</h3>
+<p>Deleting a source document alone does not remove embeddings, drafts, reports, snapshots, cached prompts, or third-party processor copies.</p>
+<p>Resolution: maintain lineage from source to derived objects; define deletion/export scope, processor deletion mechanisms, retention exceptions, backup expiry, and tombstones preventing re-import. Legal review sets required retention rather than product code assuming a universal rule. Cancellation and privacy deletion are separate operations.</p>
+<h3 id="section-83">R15 · P1 · Full workflow builder conflicts with a bounded early phase four</h3>
+<p>A general visual workflow editor and an agent framework can expand scope beyond the estimated phase-four window.</p>
+<p>Resolution: ship a finite library of parameterized workflows first: stale-stock alert, approval reminder, low-spend diagnostic, weekly client report, and approved campaign change. Treat arbitrary branching, custom code, marketplace actions, and user-defined agents as separately scoped future enhancements. Every template has tested action bounds and failure behavior.</p>
+<h2 id="section-84">Acceptance matrix to add to release review</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Required outcome</th>
+<th>Gate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Database restored after provider write</td>
+<td>Mutations frozen until reconciliation; no duplicate campaign</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>Pause request during provider outage</td>
+<td>Pending/unknown state shown; account-owner escalation</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>Agency grant revoked mid-launch</td>
+<td>Further mutations stop; paused partial resources recoverable</td>
+<td>Phases 2–3</td>
+</tr>
+<tr>
+<td>Monitoring provider returns partial cohort</td>
+<td>Coverage falls; missing runs do not reduce visibility score</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>Provider model or collection method changes</td>
+<td>Comparison discontinuity is labeled</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>Source fact corrected or deleted</td>
+<td>Affected drafts and published versions can be located</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td>Customer edits page outside product</td>
+<td>Conflict detected; no blind overwrite</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td>Pixel and server purchase repeated</td>
+<td>One logical order; transport status retained</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>Different currency and timezone accounts</td>
+<td>Original values preserved; aggregation policy explicit</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>Subscription suspended with live ads</td>
+<td>Essential monitoring/emergency path preserved by policy</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>Workflow dry run</td>
+<td>No external mutation, including incidental asset upload</td>
+<td>Phase 4</td>
+</tr>
+<tr>
+<td>Workflow loops repeatedly</td>
+<td>Cumulative caps and cooldown stop repeated action</td>
+<td>Phase 4</td>
+</tr>
+<tr>
+<td>Untrusted page includes tool instructions</td>
+<td>No privileged tool call or secret disclosure</td>
+<td>All phases</td>
+</tr>
+<tr>
+<td>Source deletion requested</td>
+<td>Derived-data lineage and retention workflow executed</td>
+<td>All phases</td>
+</tr>
+</tbody></table>
+<h2 id="section-85">Overall verdict</h2>
+<h3 id="section-86">R16 · P1 · Conversion uniqueness must not split one event by transport</h3>
+<p>The architecture proposes uniqueness on <code>(brand_id, source, event_id)</code> while also requiring browser/server deduplication. If <code>source</code> means browser versus server, the same event is stored twice. Clarify source as the business system of record, not transport. Use a canonical business-event key such as <code>(brand_id, event_type, canonical_event_id)</code> and separate delivery records keyed by destination account and transport. Preserve both incoming receipts without counting two conversions. For orders, include store identity in the external-order uniqueness key because native IDs may collide across stores.</p>
+<p>Acceptance test: identical purchase arrives once from browser and twice from server for the same store/order; canonical purchase count is one, while all three receipts remain auditable.</p>
+<p>The four-release direction is coherent if each release remains a complete workflow and external capabilities are gated individually. The architecture should prioritize tenant isolation, evidence provenance, exact approval, and recoverable execution before adding breadth. The largest unresolved commercial question is whether the combined workflow saves enough agency/operator time to justify recurring fees and forward-deployed delivery. Validate this with paid customers and measured operational effort, while keeping the larger product roadmap intact.</p>
+</section><footer class="meta">End of specification · Version 1.0 · 24 October 2026</footer></main></body></html>

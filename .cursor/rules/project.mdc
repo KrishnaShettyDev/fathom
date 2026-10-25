@@ -1,0 +1,8 @@
+---
+description: Shared repository engineering workflow and product constraints
+alwaysApply: true
+---
+
+Read and follow `AGENTS.md` and `docs/engineering/standards.md`.
+Read `docs/plans/phase-1.md` before starting product work.
+Keep agent-specific instructions as pointers to those shared sources.
