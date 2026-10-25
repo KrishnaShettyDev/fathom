@@ -1,19 +1,11 @@
 "use server";
 import { cookies } from "next/headers";
+import { selectBrandCookie } from "./selection";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireUser } from "../auth/session";
 import { workspaceSchema, type FormState } from "../auth/validation";
 
-async function selectBrandCookie(id: string) {
-  (await cookies()).set("fathom-brand", id, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30,
-  });
-}
 export async function createWorkspace(
   _previous: FormState,
   form: FormData,

@@ -34,7 +34,9 @@ jobs:
       - name: Start isolated Supabase services
         run: npm run db:start > "$RUNNER_TEMP/fathom-supabase.log" 2>&1
       - run: npm run db:test
+      - run: npm run test:migrations
       - run: npm run test:auth
+      - run: npm run test:worker
       - name: Stop local services
         if: always()
         run: npm run db:stop

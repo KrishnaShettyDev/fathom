@@ -1,6 +1,8 @@
 import { createServer } from "node:http";
 
-export function createHealthServer() {
+export function createHealthServer(
+  queue: "configured" | "not_configured" = "not_configured",
+) {
   return createServer((request, response) => {
     if (request.url !== "/healthz") {
       response.writeHead(404).end();
@@ -19,7 +21,7 @@ export function createHealthServer() {
       JSON.stringify({
         status: "ok",
         service: "worker",
-        queue: "not_configured",
+        queue,
       }),
     );
   });

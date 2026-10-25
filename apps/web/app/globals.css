@@ -1168,3 +1168,57 @@ blockquote {
     padding: 20px;
   }
 }
+
+.auth-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line, #d8d9d2);
+  border-radius: 8px;
+  background: white;
+  color: inherit;
+  font: inherit;
+  resize: vertical;
+}
+.knowledge-list h2 {
+  overflow-wrap: anywhere;
+  font-size: 1.25rem;
+}
+
+details > summary {
+  cursor: pointer;
+  padding-block: 12px;
+}
+.source-reference {
+  overflow-wrap: anywhere;
+}
+.connection-card dl {
+  margin-block: 20px;
+  font-size: 0.85rem;
+}
+.connection-card dt {
+  font-weight: 600;
+  margin-top: 12px;
+}
+.connection-card dd {
+  margin: 4px 0 0;
+}
+.source-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.85rem;
+}
+.observation-answer {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.panel table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-block: 18px;
+}
+.panel th,
+.panel td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid #deded5;
+}

@@ -9,5 +9,10 @@
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test src/*.test.ts"
+  },
+  "dependencies": {
+    "@fathom/connectors": "0.0.0",
+    "pg-boss": "12.38.0",
+    "zod": "4.6.7"
   }
 }

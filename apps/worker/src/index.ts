@@ -1,8 +1,16 @@
+import { startQueues } from "./queue.js";
 import { parsePort } from "./config.js";
 import { createHealthServer } from "./server.js";
 
 const port = parsePort(process.env.PORT);
-const server = createHealthServer();
+let queues: Awaited<ReturnType<typeof startQueues>> = null;
+try {
+  queues = await startQueues();
+} catch {
+  console.error(JSON.stringify({ event: "worker.queue_start_failed" }));
+  process.exit(1);
+}
+const server = createHealthServer(queues ? "configured" : "not_configured");
 
 server.on("error", (error: NodeJS.ErrnoException) => {
   console.error(
@@ -15,12 +23,16 @@ server.on("error", (error: NodeJS.ErrnoException) => {
 });
 server.listen(port, "0.0.0.0", () => {
   console.info(
-    JSON.stringify({ event: "worker.started", port, queue: "not_configured" }),
+    JSON.stringify({
+      event: "worker.started",
+      port,
+      queue: queues ? "configured" : "not_configured",
+    }),
   );
 });
 
 let stopping = false;
-function shutdown() {
+async function shutdown() {
   if (stopping) return;
   stopping = true;
   const deadline = setTimeout(() => {
@@ -28,6 +40,7 @@ function shutdown() {
     process.exit(1);
   }, 10_000);
   deadline.unref();
+  await queues?.stop();
   server.close((error) => {
     clearTimeout(deadline);
     if (error) process.exitCode = 1;

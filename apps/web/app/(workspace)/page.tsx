@@ -1,3 +1,4 @@
+import { requireUser } from "../../lib/auth/session";
 import { randomUUID } from "node:crypto";
 import Link from "next/link";
 import { getWorkspaceContext } from "../../lib/workspaces/context";
@@ -18,16 +19,54 @@ export default async function OverviewPage() {
         />
         <section className="panel onboarding-panel">
           <OnboardingForm requestId={randomUUID()} />
+          <p>
+            Working with clients? <Link href="/agency">Create your agency</Link>{" "}
+            or <Link href="/invitations">view invitations</Link>.
+          </p>
         </section>
       </div>
     );
+  const { client } = await requireUser();
+  const results = await Promise.all([
+    client
+      .from("brand_sources")
+      .select("id", { count: "exact", head: true })
+      .eq("brand_id", activeBrand.id)
+      .eq("state", "authorized"),
+    client
+      .from("catalogue_records")
+      .select("id", { count: "exact", head: true })
+      .eq("brand_id", activeBrand.id)
+      .is("removed_at", null),
+    client
+      .from("opportunities")
+      .select("id", { count: "exact", head: true })
+      .eq("brand_id", activeBrand.id),
+    client
+      .from("client_reports")
+      .select("id", { count: "exact", head: true })
+      .eq("brand_id", activeBrand.id),
+    client
+      .from("baseline_reviews")
+      .select("id", { count: "exact", head: true })
+      .eq("brand_id", activeBrand.id),
+  ]);
+  if (results.some((result) => result.error))
+    throw new Error("Workspace progress could not be loaded.");
+  const items = [
+    { label: "Authorized sources", href: "/connections" },
+    { label: "Current catalogue records", href: "/catalogue" },
+    { label: "Evidence-backed opportunities", href: "/opportunities" },
+    { label: "Saved reports", href: "/reports" },
+    { label: "Baseline acknowledgements", href: "/settings" },
+  ];
   return (
     <div className="page-content">
       <PageHeading
-        eyebrow="YOUR BRAND, IN PERSPECTIVE"
+        eyebrow={activeBrand.name}
         title="See clearly."
         accent="Build on real evidence."
-        description={`${activeBrand.name} has a workspace. Connect a source to build your first baseline.`}
+        description="Your saved workspace progress. Record counts describe available evidence, not business performance."
       />
       <section className="connection-banner">
         <span className="connection-orbit">
@@ -40,26 +79,27 @@ export default async function OverviewPage() {
             {activeBrand.reporting_timezone}
           </p>
         </div>
-        <span className="tag">Saved workspace</span>
-      </section>
-      <section className="empty-state">
-        <div className="empty-art">
-          <Icon name="signal" size={38} />
-        </div>
-        <span className="eyebrow">YOUR FIRST BASELINE</span>
-        <h2>The picture starts with your sources.</h2>
-        <p>
-          Products, visibility, opportunities, and reports will appear when real
-          data has been connected and processed. No measurements are available
-          yet.
-        </p>
-        <Link href="/connections" className="button primary">
-          Review source setup
-          <Icon name="arrow" />
+        <Link href="/settings" className="button">
+          Workspace settings
         </Link>
-        <small>
-          Shopify catalogue connection is the next implementation step.
-        </small>
+      </section>
+      <section className="panel onboarding-panel">
+        <h2>Setup and activation</h2>
+        {items.map((item, index) => (
+          <p key={item.href}>
+            <Link href={item.href}>{item.label}</Link>:{" "}
+            {results[index]?.count ?? "Unavailable"}
+          </p>
+        ))}
+        <p>
+          Connect a source, review the baseline, then accept or assign an
+          opportunity supported by approved evidence. Website-only workspaces
+          can start with an <Link href="/audit">audit</Link>.
+        </p>
+        <p>
+          Inspect source timestamps and run coverage before drawing conclusions.
+          A connected account alone does not establish complete or fresh data.
+        </p>
       </section>
     </div>
   );

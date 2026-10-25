@@ -1,7 +1,7 @@
 # Phase One: Intelligence
 
-Status: frontend and initial owner identity/workspace slice implemented locally.
-No live source integrations.
+Status: substantial implementation locally verified; Phase One is not complete.
+Real provider accounts and production configuration remain deferred.
 Source: PRD Parts 1, 2, 5, 6, and 7. This file tracks delivery, not a replacement PRD.
 
 ## Outcome
@@ -76,23 +76,51 @@ partners remain open. Development can proceed without inventing those answers.
 Real deployment needs authorized Railway/Supabase projects; OTP needs email
 configuration; real Shopify verification needs an app and development store.
 
-## Delivery evidence
+## Current delivery evidence (25 October 2026)
 
-- Reviewed the supplied PRD and its final decisions/pressure-test requirements.
-- Shared agent instructions and feature-planning template written.
-- No authentication, database policy, connector, or customer workflow is complete.
+- Owner OTP/workspaces, agency invitation/grant/revocation, exact-version Brand
+  Knowledge, source registry, scoped opportunities and immutable reports.
+- Shopify and Google OAuth/credential handling; catalogue and daily analytics
+  adapters; actual PostgreSQL-backed queue/outbox, checkpoints, webhook receipts,
+  reconcilers, usage reservations and current-authority worker checks.
+- Bounded static website audits and immutable/recheckable findings; fixed API
+  observation cohorts, quotas, schedules, raw evidence and same-run comparisons.
+- Real-data screens for catalogue, analytics, audits, observations, opportunities,
+  reports, settings and baseline acknowledgements. No mock business data.
+- Agency staff invitation/acceptance/revocation, independent knowledge editing and
+  approval, opportunity/report delegation, current-member assignment choices and
+  verified recipient ownership claims from unclaimed agency setup requests.
+- Owner data export uses a consistent NDJSON snapshot, completion checksum and
+  current-permission checks between batches; credentials are excluded.
+- Owner-controlled support sessions with purpose and expiry enforced at RLS and
+  worker boundaries. Provider configuration documented without provisioning.
+- 240 pgTAP assertions passed. All 23 migrations applied in order to a fresh
+  application schema; the same assertions passed there. Schema-only restoration
+  passed; production data recovery remains unverified.
+- Local OTP/session test passed. Isolated worker tests passed queue dispatch,
+  pagination recovery, deletion reconciliation, revocation, uncertain observation
+  requests, analytics missingness and terminal-job reconciliation.
+- Shopify catalogue GraphQL queries validated against 2026-07. Provider transport
+  fixtures are tests only and are not proof of authorized live integration.
 
-- Web/worker scaffolds, strict TypeScript, exact dependency pins, lockfile,
-  formatter/linter, tests, and a CI workflow now exist. See the foundation plan
-  for passed checks and environment-blocked verification; this is not a release.
+## Remaining implementation and release gates
 
-- User prioritized the frontend next. The Fathom-styled intelligence interface is
-  implemented with labeled fixtures and empty states across eight routes. See
-  `frontend-intelligence.md` for verification and browser-access limitations.
-  This changes implementation order, not the backend or release-readiness gates.
+This is more than a final credentials/configuration task:
 
-- All application mock data and sample exports have been removed at the user's
-  direction. Real email OTP, server sessions, owner-created workspaces, SQL RLS,
-  transactional creation and audit records are now implemented. Local database
-  and auth tests passed; see `identity-and-real-data.md`. Agency claims/invitations
-  and connectors remain unfinished; this is not completion of milestone 2.
+1. Subscription/billing state, included entitlements, overage policy and reconciled
+   billing webhooks. Billing provider choice is pending the user's answer.
+   Current request quotas are not billing or currency spending controls.
+2. Retention/deletion lifecycle: the user must select manual review, a cancellation
+   window or immediate owner-confirmed deletion before destructive rules are built.
+   Portability export and source credential removal are implemented.
+3. Broader authenticated HTTP/export authorization and browser/accessibility tests.
+   Real database/stream authorization tests pass, but do not replace these checks.
+   Browser access was denied; no workaround or browser result is claimed.
+4. Authorized live Shopify/GSC/GA4/observation tests, deployment/email configuration,
+   secret rotation, production data recovery/reconciliation, operational ownership
+   and representative paying brand/agency customer acceptance. No configured
+   provider credentials were used. Conflicted ownership requests stop for human
+   resolution; existing brand ownership is never automatically transferred.
+
+See `phase-1-completion.md` and individual feature plans for implementation evidence.
+Production release remains blocked until all applicable PRD gates are demonstrated.

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "workspaces": [
+    "packages/*",
     "apps/*"
   ],
   "engines": {
@@ -24,7 +25,12 @@
     "db:test": "supabase test db",
     "db:types": "node scripts/generate-database-types.mjs",
     "test:auth": "npm run test:auth --workspace=@marketing-os/web",
-    "db:configure": "node scripts/configure-local.mjs"
+    "db:configure": "node scripts/configure-local.mjs",
+    "prepare": "npm run build --workspace=@fathom/connectors",
+    "pretypecheck": "npm run build --workspace=@fathom/connectors",
+    "predev": "npm run build --workspace=@fathom/connectors",
+    "test:worker": "npm run build --workspace=@fathom/connectors && node --import tsx scripts/test-worker.mjs",
+    "test:migrations": "node scripts/test-migrations.mjs"
   },
   "devDependencies": {
     "@types/node": "24.19.2",
