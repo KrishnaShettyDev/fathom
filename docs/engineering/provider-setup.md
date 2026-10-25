@@ -28,7 +28,7 @@ Configure an authorized app with `read_products` and expiring offline access.
 Register `/api/connectors/shopify/callback` on APP_ORIGIN. Set the app client ID
 and secret in both runtimes. API version is pinned to 2026-07.
 
-Configure signed webhooks to `/api/connectors/shopify/webhook` for product create,
+Configure signed webhooks to `/api/connectors/shopify/webhooks` for product create,
 update/delete, app uninstall and scope changes. The endpoint expects raw Shopify
 HMAC signatures and unique delivery IDs. Webhook registration is provider setup,
 not performed by this application. Daily catalogue reconciliation also catches

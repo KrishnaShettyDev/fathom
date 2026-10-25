@@ -60,3 +60,10 @@ Local evidence: 240 pgTAP assertions; 23 sequential migrations on a fresh applic
 schema; schema restore; OTP/session verification; isolated real queue/worker tests;
 provider normalization, credential/signature and audit/mention tests. Authorized
 provider accounts and customer acceptance have not been exercised.
+
+Final local commands passed on the pinned Node 24.22.1 runtime: `npm run check`,
+`npm run test:worker` and `npm run test:auth`. `npm run db:test` and
+`npm run test:migrations` passed 240 assertions across 23 forward migrations.
+`git diff --check` and staged credential-pattern review passed. Earlier failures
+were resolved: robots-parser declaration runtime resolution, isolated Supabase
+schema grants, and export/worker connection cleanup. No failing check was waived.
