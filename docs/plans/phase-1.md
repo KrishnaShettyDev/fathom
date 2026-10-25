@@ -97,6 +97,9 @@ configuration; real Shopify verification needs an app and development store.
 - 240 pgTAP assertions passed. All 23 migrations applied in order to a fresh
   application schema; the same assertions passed there. Schema-only restoration
   passed; production data recovery remains unverified.
+- Authenticated HTTP harness now exercises the production Next server, real OTP
+  cookies and isolated PostgREST/RLS: report access, owner export, denied mutations,
+  selector tampering, support expiry, agency revocation and service outages.
 - Local OTP/session test passed. Isolated worker tests passed queue dispatch,
   pagination recovery, deletion reconciliation, revocation, uncertain observation
   requests, analytics missingness and terminal-job reconciliation.
@@ -113,8 +116,9 @@ This is more than a final credentials/configuration task:
 2. Retention/deletion lifecycle: the user must select manual review, a cancellation
    window or immediate owner-confirmed deletion before destructive rules are built.
    Portability export and source credential removal are implemented.
-3. Broader authenticated HTTP/export authorization and browser/accessibility tests.
-   Real database/stream authorization tests pass, but do not replace these checks.
+3. Browser/accessibility tests and broader HTTP coverage of remaining workflows.
+   Authenticated report pages/downloads, owner exports, RPC denial, current-session
+   revocation and service outages now have real HTTP integration coverage.
    Browser access was denied; no workaround or browser result is claimed.
 4. Authorized live Shopify/GSC/GA4/observation tests, deployment/email configuration,
    secret rotation, production data recovery/reconciliation, operational ownership

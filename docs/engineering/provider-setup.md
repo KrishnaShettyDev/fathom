@@ -75,7 +75,10 @@ scripts or certify full-site SEO health.
 ## Verification and recovery
 
 Run `npm run check`, `npm run db:test`, `npm run test:auth` and
-`npm run test:worker` and `npm run test:migrations` with local Supabase running. Worker integration tests create
+`npm run test:worker`, `npm run test:migrations` and `npm run test:http` with local
+Supabase running. The HTTP command builds the current production web app and uses
+a disposable database/PostgREST container plus real local OTP sessions; its
+principals and resources are removed afterward. Worker integration tests create
 and remove their own database; intercepted transport is test-only. Never run these
 against production by replacing their local database targets.
 

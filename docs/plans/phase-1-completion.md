@@ -67,3 +67,11 @@ Final local commands passed on the pinned Node 24.22.1 runtime: `npm run check`,
 `git diff --check` and staged credential-pattern review passed. Earlier failures
 were resolved: robots-parser declaration runtime resolution, isolated Supabase
 schema grants, and export/worker connection cleanup. No failing check was waived.
+
+HTTP isolation follow-up: `npm run test:http` now passes with real OTP cookies,
+production Next routes and disposable PostgREST/RLS. It covers own/other-brand
+report pages/downloads, owner export, forbidden RPC mutation, workspace-cookie
+tampering, support expiry, unchanged-cookie agency revocation and auth/database
+outages. Download routes now use consistent uncached 401/404/503 responses.
+`npm run check` passed again; the HTTP harness is included in CI. Browser tests,
+remaining workflow HTTP coverage and external release gates remain open.
