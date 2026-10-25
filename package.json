@@ -32,7 +32,8 @@
     "test:worker": "npm run build --workspace=@fathom/connectors && node --import tsx scripts/test-worker.mjs",
     "test:migrations": "node scripts/test-migrations.mjs",
     "test:http": "node scripts/test-http.mjs",
-    "pretest:http": "npm run build --workspace=@fathom/connectors && npm run build --workspace=@marketing-os/web"
+    "pretest:http": "npm run build --workspace=@fathom/connectors && npm run build --workspace=@marketing-os/web",
+    "supabase:check": "node scripts/verify-supabase.mjs"
   },
   "devDependencies": {
     "@types/node": "24.19.2",
